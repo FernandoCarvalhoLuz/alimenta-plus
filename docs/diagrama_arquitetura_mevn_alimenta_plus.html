@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alimenta+ - Diagrama de Arquitetura MEVN</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --bg-main: #0f172a;
+            --bg-card: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --vue-color: #42b883;
+            --express-color: #38bdf8;
+            --mongo-color: #13aa52;
+            --accent-orange: #f97316;
+            --border-color: #334155;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        header h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2.8rem;
+            color: var(--text-main);
+            margin-bottom: 10px;
+        }
+
+        header h1 span {
+            color: var(--vue-color);
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        /* CARD DO DIAGRAMA CONTÊINER */
+        .diagram-container {
+            background-color: var(--bg-card);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            overflow-x: auto;
+            margin-bottom: 40px;
+        }
+
+        .diagram-wrapper {
+            min-width: 1200px;
+            position: relative;
+        }
+
+        svg {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+
+        /* TEXTOS DENTRO DO SVG */
+        .svg-text-title {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            fill: #ffffff;
+            font-size: 16px;
+        }
+
+        .svg-text-subtitle {
+            fill: var(--text-muted);
+            font-size: 12px;
+        }
+
+        .svg-text-action {
+            fill: #38bdf8;
+            font-size: 11px;
+            font-weight: 500;
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* SEÇÃO LEGENDADA DE FLUXOS */
+        .explanation-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .flow-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 25px;
+        }
+
+        .flow-card h3 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .flow-card.doador h3 { color: var(--accent-orange); }
+        .flow-card.ong h3 { color: var(--vue-color); }
+        .flow-card.backend h3 { color: var(--express-color); }
+
+        .flow-card ul {
+            list-style: none;
+        }
+
+        .flow-card li {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .flow-card li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: var(--text-main);
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Arquitetura Mapeada <span>Alimenta+</span></h1>
+            <p>Diagrama visual de alto nível com fluxo de ações e atores do sistema (Stack MEVN)</p>
+        </header>
+
+        <!-- CONTÊINER DO DIAGRAMA SVG VIVO -->
+        <div class="diagram-container">
+            <div class="diagram-wrapper">
+                <svg viewBox="0 0 1200 650" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    
+                    <!-- DEFINIÇÃO DE SETAS E DEGRADÊS -->
+                    <defs>
+                        <marker id="arrow-blue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                            <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8"/>
+                        </marker>
+                        <marker id="arrow-green" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                            <path d="M 0 1 L 10 5 L 0 9 z" fill="#13aa52"/>
+                        </marker>
+                        <marker id="arrow-orange" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                            <path d="M 0 1 L 10 5 L 0 9 z" fill="#f97316"/>
+                        </marker>
+                    </defs>
+
+                    <!-- COLUNA 1: ATORES -->
+                    <!-- Doador Ricardo -->
+                    <g transform="translate(40, 140)">
+                        <rect width="180" height="110" rx="12" fill="#0f172a" stroke="#f97316" stroke-width="2"/>
+                        <circle cx="40" cy="55" r="20" fill="#f97316" opacity="0.2"/>
+                        <!-- Ícone de usuário/comércio alternativo em texto/path -->
+                        <text x="33" y="62" font-family="FontAwesome" font-size="20" fill="#f97316">&#xf55a;</text> 
+                        <text x="75" y="48" class="svg-text-title">Ricardo</text>
+                        <text x="75" y="68" class="svg-text-subtitle">Doador (Comércio)</text>
+                        <text x="75" y="85" class="svg-text-subtitle">Padaria / Restaurante</text>
+                    </g>
+
+                    <!-- ONG Sandra / Bruno -->
+                    <g transform="translate(40, 390)">
+                        <rect width="180" height="110" rx="12" fill="#0f172a" stroke="#42b883" stroke-width="2"/>
+                        <circle cx="40" cy="55" r="20" fill="#42b883" opacity="0.2"/>
+                        <text x="32" y="62" font-family="FontAwesome" font-size="20" fill="#42b883">&#xf4c1;</text>
+                        <text x="75" y="45" class="svg-text-title">Sandra / Bruno</text>
+                        <text x="75" y="65" class="svg-text-subtitle">ONG (Receptores)</text>
+                        <text x="75" y="82" class="svg-text-subtitle">Gestão e Retirada</text>
+                    </g>
+
+                    <!-- LINHAS DE AÇÃO DOS ATORES PARA O FRONTEND -->
+                    <!-- Linha Ricardo -> Vue -->
+                    <path d="M 220 195 L 340 195" stroke="#f97316" stroke-width="2" stroke-dasharray="4 4" marker-end="url(#arrow-orange)"/>
+                    <text x="228" y="185" class="svg-text-action" fill="#f97316">1. Cadastro Expresso</text>
+
+                    <!-- Linha Sandra -> Vue -->
+                    <path d="M 220 445 L 340 445" stroke="#42b883" stroke-width="2" stroke-dasharray="4 4" marker-end="url(#arrow-green)"/>
+                    <text x="225" y="435" class="svg-text-action" fill="#42b883">1. Busca Feed / Reserva</text>
+
+
+                    <!-- COLUNA 2: FRONTEND (VUE.JS) -->
+                    <g transform="translate(350, 110)">
+                        <rect width="240" height="430" rx="16" fill="#1e293b" stroke="#334155" stroke-width="2"/>
+                        
+                        <!-- Header Vue -->
+                        <rect width="240" height="60" rx="16" fill="#0f172a"/>
+                        <rect y="40" width="240" height="20" fill="#0f172a"/>
+                        <text x="65" y="36" class="svg-text-title" fill="#42b883">Vue.js 3 SPA</text>
+                        <text x="20" y="35" font-family="FontAwesome" font-size="22" fill="#42b883">&#xf41f;</text>
+                        
+                        <!-- Componentes Internos -->
+                        <g transform="translate(15, 80)">
+                            <rect width="210" height="65" rx="8" fill="#0f172a" stroke="#334155"/>
+                            <text x="15" y="28" class="svg-text-title" font-size="13">Módulo de Autenticação</text>
+                            <text x="15" y="48" class="svg-text-subtitle" font-size="11">Login JWT e Termo Jurídico</text>
+                        </g>
+
+                        <g transform="translate(15, 160)">
+                            <rect width="210" height="65" rx="8" fill="#0f172a" stroke="#334155"/>
+                            <text x="15" y="28" class="svg-text-title" font-size="13">Painel do Doador</text>
+                            <text x="15" y="48" class="svg-text-subtitle" font-size="11">Formulário Mínimo de Itens</text>
+                        </g>
+
+                        <g transform="translate(15, 240)">
+                            <rect width="210" height="65" rx="8" fill="#0f172a" stroke="#334155"/>
+                            <text x="15" y="28" class="svg-text-title" font-size="13">Feed de Alimentos (ONG)</text>
+                            <text x="15" y="48" class="svg-text-subtitle" font-size="11">Filtros por Local / Categoria</text>
+                        </g>
+
+                        <!-- Axios Client -->
+                        <g transform="translate(15, 340)">
+                            <rect width="210" height="60" rx="8" fill="#0f172a" stroke="#38bdf8" stroke-width="1"/>
+                            <text x="45" y="35" class="svg-text-title" font-size="14" fill="#38bdf8">Axios HTTP Client</text>
+                            <text x="15" y="37" font-family="FontAwesome" font-size="18" fill="#38bdf8">&#xf0c1;</text>
+                        </g>
+                    </g>
+
+
+                    <!-- LINHA DE COMUNICAÇÃO: FRONTEND -> BACKEND -->
+                    <path d="M 590 325 L 700 325" stroke="#38bdf8" stroke-width="3" marker-end="url(#arrow-blue)"/>
+                    <path d="M 700 345 L 590 345" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrow-blue)"/>
+                    <text x="598" y="300" class="svg-text-action">2. Requisições REST</text>
+                    <text x="612" y="315" class="svg-text-subtitle" font-size="10">JSON + Header JWT</text>
+                    <text x="598" y="370" class="svg-text-action" fill="#cbd5e1">Retorno JSON</text>
+                    <text x="610" y="385" class="svg-text-subtitle" font-size="10">Status HTTP (201, 200)</text>
+
+
+                    <!-- COLUNA 3: BACKEND (EXPRESS.JS) -->
+                    <g transform="translate(710, 140)">
+                        <rect width="240" height="370" rx="16" fill="#1e293b" stroke="#334155" stroke-width="2"/>
+                        
+                        <!-- Header Express -->
+                        <rect width="240" height="60" rx="16" fill="#0f172a"/>
+                        <rect y="40" width="240" height="20" fill="#0f172a"/>
+                        <text x="65" y="36" class="svg-text-title" fill="#38bdf8">Express.js API</text>
+                        <text x="20" y="37" font-family="FontAwesome" font-size="22" fill="#38bdf8">&#xf233;</text>
+
+                        <!-- Rotas e Endpoints -->
+                        <g transform="translate(15, 80)">
+                            <rect width="210" height="75" rx="8" fill="#0f172a" stroke="#334155"/>
+                            <text x="15" y="25" class="svg-text-title" font-size="13" fill="#38bdf8">Roteador de Endpoints</text>
+                            <text x="15" y="45" class="svg-text-subtitle" font-size="11">POST /doacoes | GET /feed</text>
+                            <text x="15" y="60" class="svg-text-subtitle" font-size="11">PUT /reservas/:id</text>
+                        </g>
+
+                        <!-- Middleware JWT -->
+                        <g transform="translate(15, 175)">
+                            <rect width="210" height="55" rx="8" fill="#0f172a" stroke="#f97316"/>
+                            <text x="15" y="32" class="svg-text-title" font-size="13">Middleware de Segurança</text>
+                            <text x="15" y="48" class="svg-text-subtitle" font-size="10">Validação e Descriptografia de Token</text>
+                        </g>
+
+                        <!-- Mongoose ORM -->
+                        <g transform="translate(15, 250)">
+                            <rect width="210" height="90" rx="8" fill="#0f172a" stroke="#13aa52"/>
+                            <text x="15" y="28" class="svg-text-title" font-size="13" fill="#13aa52">Mongoose ODM</text>
+                            <text x="15" y="50" class="svg-text-subtitle" font-size="11">Validação de Schemas</text>
+                            <text x="15" y="68" class="svg-text-subtitle" font-size="11">Modelos de Usuário e Doação</text>
+                        </g>
+                    </g>
+
+
+                    <!-- CONEXÃO BACKEND -> SERVIÇO EXTERNO (VIACEP) -->
+                    <path d="M 830 140 L 830 75" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrow-blue)"/>
+                    <path d="M 850 75 L 850 140" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrow-blue)"/>
+                    <text x="865" y="100" class="svg-text-action">3. CEP Informado</text>
+                    <text x="865" y="115" class="svg-text-subtitle" font-size="10">Autopreenchimento de Bairro/Rua</text>
+
+                    <!-- CAIXA SERVIÇO EXTERNO (VIACEP) -->
+                    <g transform="translate(710, 15)">
+                        <rect width="240" height="60" rx="10" fill="#0f172a" stroke="#38bdf8" stroke-width="2"/>
+                        <text x="55" y="36" class="svg-text-title" font-size="14">API Externa: ViaCEP</text>
+                        <text x="20" y="38" font-family="FontAwesome" font-size="20" fill="#38bdf8">&#xf0ac;</text>
+                    </g>
+
+
+                    <!-- LINHA DE PERSISTÊNCIA: BACKEND -> BANCO DE DADOS -->
+                    <path d="M 950 380 L 1020 380" stroke="#13aa52" stroke-width="3" marker-end="url(#arrow-green)"/>
+                    <text x="955" y="370" class="svg-text-action" fill="#13aa52">4. Driver BSON</text>
+
+
+                    <!-- COLUNA 4: BANCO DE DADOS (MONGO DB) -->
+                    <g transform="translate(1030, 210)">
+                        <rect width="140" height="230" rx="16" fill="#1e293b" stroke="#13aa52" stroke-width="2"/>
+                        
+                        <!-- Header MongoDB -->
+                        <rect width="140" height="60" rx="16" fill="#0f172a"/>
+                        <rect y="40" width="140" height="20" fill="#0f172a"/>
+                        <text x="45" y="36" class="svg-text-title" fill="#13aa52" font-size="14">MongoDB</text>
+                        <text x="15" y="37" font-family="FontAwesome" font-size="20" fill="#13aa52">&#xf1c0;</text>
+
+                        <!-- Coleções -->
+                        <g transform="translate(12, 80)">
+                            <rect width="116" height="55" rx="6" fill="#0f172a" stroke="#334155"/>
+                            <text x="10" y="25" class="svg-text-title" font-size="11">Coleção: usuarios</text>
+                            <text x="10" y="42" class="svg-text-subtitle" font-size="9">Doadores e ONGs</text>
+                        </g>
+
+                        <g transform="translate(12, 150)">
+                            <rect width="116" height="55" rx="6" fill="#0f172a" stroke="#334155"/>
+                            <text x="10" y="25" class="svg-text-title" font-size="11">Coleção: doacoes</text>
+                            <text x="10" y="42" class="svg-text-subtitle" font-size="9">Itens e Status de Reserva</text>
+                        </g>
+                    </g>
+
+                </svg>
+            </div>
+        </div>
+
+        <!-- EXPLICAÇÕES DO FLUXO DE AÇÕES -->
+        <section class="explanation-section">
+            
+            <div class="flow-card doador">
+                <h3><i class="fa-solid fa-store"></i> Fluxo do Doador (Ricardo)</h3>
+                <ul>
+                    <li><strong>Ação 1:</strong> Ricardo faz login e aceita o Termo de Segurança Jurídica na interface Vue.js.</li>
+                    <li><strong>Ação 2:</strong> Ao final do expediente, preenche o formulário expresso com a sobra de comida.</li>
+                    <li><strong>Ação 3:</strong> O Vue envia as coordenadas e os dados estruturados via Axios ao Express, que salva instantaneamente no MongoDB como uma doação de status <code>"DISPONIVEL"</code>.</li>
+                </ul>
+            </div>
+
+            <div class="flow-card ong">
+                <h3><i class="fa-solid fa-hand-holding-heart"></i> Fluxo do Receptor (Sandra)</h3>
+                <ul>
+                    <li><strong>Ação 1:</strong> Sandra abre o painel da ONG em Vue.js para analisar o feed de alimentos ativos.</li>
+                    <li><strong>Ação 2:</strong> Filtra a listagem por bairros ou categorias específicas de interesse da cozinha.</li>
+                    <li><strong>Ação 3:</strong> Clica em "Reservar". O sistema altera o status do documento para <code>"RESERVADO"</code> no MongoDB, bloqueando o lote para outras instituições e disponibilizando as orientações de acesso ao Bruno.</li>
+                </ul>
+            </div>
+
+            <div class="flow-card backend">
+                <h3><i class="fa-solid fa-gears"></i> Inteligência de Integração</h3>
+                <ul>
+                    <li><strong>ViaCEP:</strong> Quando qualquer usuário digita seu CEP, o Express atua de forma síncrona batendo na API externa para preencher a rua e o bairro, garantindo a exatidão logística que o voluntário de campo precisa para a retirada física.</li>
+                    <li><strong>Mongoose:</strong> Garante que mesmo em um banco de dados NoSQL flexível, nenhum pacote de alimento seja criado sem campos obrigatórios (como quantidade ou data limite de expiração).</li>
+                </ul>
+            </div>
+
+        </section>
+    </div>
+
+</body>
+</html>
