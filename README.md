@@ -9,12 +9,19 @@ Repositório oficial do MVP do Alimenta+, plataforma que conecta estabelecimento
 
 ## 🚀 Como rodar a aplicação
 
-### 1. Banco de Dados (MongoDB)
-Certifique-se de ter o MongoDB rodando localmente na porta `27017`.
-Para popular os dados iniciais do MVP, execute o script:
+### 1. Banco de Dados (MongoDB Atlas - Cloud)
+Nosso banco de dados está hospedado na nuvem (Serverless) utilizando o **MongoDB Atlas**. 
+Essa decisão arquitetural permite que qualquer membro da equipe rode o projeto sem precisar instalar bancos de dados localmente.
+
+Para popular ou resetar os dados iniciais do MVP, conecte-se ao nosso cluster e rode o script:
 ```bash
-mongosh < banco_de_dados/seed.js
+# 1. Conecte-se ao Cluster remotamente
+mongosh "mongodb+srv://cluster0.gjuql2v.mongodb.net/" --apiVersion 1 --username fernando_db_user
+
+# 2. Quando estiver no terminal do Atlas, execute:
+load("banco_de_dados/seed.js")
 ```
+*(Nota: A senha do banco de dados deve ser solicitada à equipe ou configurada via arquivo `.env` na próxima Sprint).*
 
 ### 2. Rodando a API (Backend)
 ```bash
