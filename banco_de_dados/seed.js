@@ -1,4 +1,4 @@
-use alimentaplus_db;
+db = db.getSiblingDB("alimentaplus_db");
 
 // Limpando coleções para garantir que o script rode limpo todas as vezes
 db.usuarios.drop();
