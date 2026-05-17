@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apresentação Sprint 1 - Alimenta+</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
+
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --primary: #10b981;
+            --secondary: #3b82f6;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg-color);
+            color: var(--text-main);
+            overflow-x: hidden;
+        }
+
+        /* Fundo animado super sutil */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%; left: -50%; width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(16,185,129,0.05) 0%, rgba(15,23,42,0) 50%);
+            z-index: -1;
+            animation: pulse 15s infinite alternate;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.1); }
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 60px;
+            padding: 40px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            margin: 0;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        h2 {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        p.subtitle {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+        }
+
+        .section {
+            margin-bottom: 80px;
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .section:hover {
+            transform: translateY(-5px);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .card {
+            background: rgba(15, 23, 42, 0.8);
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 4px solid var(--secondary);
+        }
+
+        .card h3 {
+            margin-top: 0;
+            color: #38bdf8;
+            font-size: 1.4rem;
+        }
+
+        code {
+            background: #020617;
+            padding: 10px 15px;
+            border-radius: 8px;
+            display: block;
+            color: #a7f3d0;
+            font-size: 1rem;
+            margin: 15px 0;
+            overflow-x: auto;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .highlight {
+            color: #fbbf24;
+            font-weight: bold;
+        }
+
+        /* Estilizando o passo a passo */
+        ol {
+            padding-left: 20px;
+        }
+        ol li {
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-muted);
+            border-top: 1px solid rgba(255,255,255,0.1);
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>🥗 Alimenta+</h1>
+        <p class="subtitle">Conectando comida a quem precisa — ODS 2 (Fome Zero)</p>
+        <p>Apresentação da Sprint 1 | Engenharia de Software Fullstack</p>
+    </header>
+
+    <div class="container">
+
+        <!-- SESSÃO 1 -->
+        <div class="section">
+            <h2>1. O Problema e a Solução (Inception)</h2>
+            <p>Através do Lean Inception, criamos Personas para entender quem utilizará o sistema. Nosso MVP é focado na <strong>Onda 1 e 2</strong>.</p>
+            <div class="grid">
+                <div class="card">
+                    <h3>👤 Doador (Ricardo)</h3>
+                    <p>Precisa de um sistema ágil <strong>(Cadastro Expresso)</strong> no final do expediente para não perder tempo jogando comida fora e precisa de respaldo <strong>Jurídico</strong>.</p>
+                </div>
+                <div class="card">
+                    <h3>🤝 Receptora (ONG - Sandra)</h3>
+                    <p>Precisa de um painel confiável onde ela possa ver as doações e <strong>Reservar</strong> os itens para evitar viagens perdidas.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SESSÃO 2 -->
+        <div class="section">
+            <h2>2. A Arquitetura Tecnológica (MEVN Stack)</h2>
+            <p>Escolhemos a stack moderna baseada inteiramente em JavaScript para unificar a linguagem de ponta a ponta.</p>
+            <div class="grid">
+                <div class="card" style="border-left-color: #10b981;">
+                    <h3>M - MongoDB</h3>
+                    <p>Banco de dados NoSQL Orientado a Documentos. Hospedado na nuvem (Atlas) para agilidade e escalabilidade sem precisar instalar nada na faculdade.</p>
+                </div>
+                <div class="card" style="border-left-color: #f59e0b;">
+                    <h3>E & N - Express + Node.js</h3>
+                    <p>O cérebro do projeto. Uma API RESTful que gerencia as reservas e as regras de negócio antes de salvar no banco.</p>
+                </div>
+                <div class="card" style="border-left-color: #3b82f6;">
+                    <h3>V - Vue.js</h3>
+                    <p>Interface SPA (Single Page Application) responsiva. Perfeito para rodar rápido no celular do Doador.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SESSÃO 3 -->
+        <div class="section">
+            <h2>3. Estrutura do GitHub e Pastas</h2>
+            <p>Dividimos o nosso repositório profissionalmente. Cada pasta tem um papel fundamental:</p>
+            <ul>
+                <li><span class="highlight">/backend/</span>: Onde roda o Node.js. Já contendo o arquivo `package.json` (que dita quais bibliotecas vamos baixar) e o `server.js` (o motor da API).</li>
+                <li><span class="highlight">/frontend/</span>: Onde roda o Vue.js. Também contém seu próprio `package.json` para instalar as bibliotecas de tela.</li>
+                <li><span class="highlight">/banco_de_dados/</span>: Onde ficam nossos scripts `.js` de inicialização (Seed) para limpar e popular o banco automaticamente.</li>
+                <li><span class="highlight">/docs/</span>: Toda a inteligência do negócio (Este roteiro, o Canvas MVP e as Histórias de Usuário).</li>
+            </ul>
+            <p>E na raiz do projeto temos o <strong>README.md</strong>, que é o mapa do tesouro ensinando qualquer desenvolvedor a rodar o app.</p>
+        </div>
+
+        <!-- SESSÃO 4 -->
+        <div class="section">
+            <h2>4. Subindo a Aplicação (O que fizemos na prática)</h2>
+            <p>O professor pediu que a aplicação já pudesse ser "levantada". Explicando os comandos que usamos no VS Code:</p>
+            <ol>
+                <li>
+                    <strong>O Comando Mágico de Instalação:</strong>
+                    <code>npm install</code>
+                    Explicando para a turma: O Node Package Manager lê o nosso <i>package.json</i> e vai na internet buscar tudo o que precisamos (Vue, Express, Mongoose) salvando na pasta oculta <i>node_modules</i>.
+                </li>
+                <li>
+                    <strong>Ligando o Motor do Backend:</strong>
+                    <code>npm run dev</code>
+                    Explicando: Esse comando acorda o nosso arquivo <i>server.js</i> na porta 3000. O sufixo "dev" ativa o <i>Nodemon</i>, que reinicia o servidor sozinho a cada vez que a gente salva o código.
+                </li>
+                <li>
+                    <strong>Ligando a Vitrine do Frontend:</strong>
+                    <code>npm run serve</code>
+                    Explicando: Inicia a tela do usuário na porta 8080 usando o <i>Vite</i>, que compila a tela na velocidade da luz!
+                </li>
+            </ol>
+        </div>
+
+        <!-- SESSÃO 5 -->
+        <div class="section">
+            <h2>5. O Banco de Dados e a Nuvem (Demonstração)</h2>
+            <p>Nós modelamos a coleção de <strong>Usuários</strong> e <strong>Doações</strong> através do Mongoose. Em vez de rodar local, levamos para a Nuvem!</p>
+            <div class="card">
+                <h3>O Script de Seed</h3>
+                <p>Nós usamos o terminal conectado à nuvem para rodar a função <code>load()</code>:</p>
+                <code>load("banco_de_dados/seed.js")</code>
+                <p>Isso inseriu os dados de teste no <strong>MongoDB Atlas</strong> instantaneamente.</p>
+            </div>
+            <p style="margin-top:20px;"><em>*Dica para a apresentação: Neste momento, abra o site do MongoDB Atlas ou o MongoPlayground na tela e mostre os dados em JSON (Coleção usuarios e doacoes) comprovando a conexão.*</em></p>
+        </div>
+
+        <!-- SESSÃO 6 -->
+        <div class="section">
+            <h2>6. Versionamento (Como trabalhamos em equipe)</h2>
+            <p>Para garantir que ninguém perca o trabalho do outro, usamos o <strong>Triângulo de Ouro do Git</strong> no final de cada dia:</p>
+            <code>1. git add . </code>
+            <p>Prepara todos os arquivos modificados (Coloca no carrinho).</p>
+            <code>2. git commit -m "mensagem"</code>
+            <p>Bate a foto do código e coloca uma etiqueta explicando o que foi feito.</p>
+            <code>3. git push</code>
+            <p>Envia a atualização com segurança lá para o nosso repositório no GitHub para todos poderem baixar com o <i>git pull</i>!</p>
+        </div>
+
+    </div>
+
+    <div class="footer">
+        <p>Desenvolvido com excelência para a disciplina de Desenvolvimento FullStack - UVA.</p>
+    </div>
+
+</body>
+</html>
