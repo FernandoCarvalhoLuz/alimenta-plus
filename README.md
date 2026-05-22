@@ -23,7 +23,7 @@ load("banco_de_dados/seed.js")
 ```
 *(Nota: A senha do banco de dados deve ser solicitada à equipe ou configurada via arquivo `.env` na próxima Sprint).*
 
-### 2. Rodando a API (Backend)
+### 2. Iniciando o backend
 ```bash
 cd backend
 npm install
@@ -31,7 +31,7 @@ npm run dev
 ```
 A API rodará em `http://localhost:3000`
 
-### 3. Rodando o Frontend
+### 3. Iniciando o frontend
 ```bash
 cd frontend
 npm install

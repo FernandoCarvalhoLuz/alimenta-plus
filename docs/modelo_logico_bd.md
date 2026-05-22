@@ -36,12 +36,25 @@ Esta coleção armazena os pacotes de alimentos disponibilizados pelos doadores 
   "categoria": "String (Ex: 'Proteínas', 'Hortifrúti') - [Filtros Inteligentes Onda 5]",
   "quantidade": "String (Ex: '5kg' ou '20 Marmitas')",
   "status_reserva": "String (Restrito a: 'DISPONIVEL', 'RESERVADA', 'COLETADA') - [Sistemas de Reservas Onda 3]",
-  "ong_reservou_id": "ObjectId (Referência ao _id da ONG na coleção 'usuarios'. É null se status = 'DISPONIVEL')",
   "data_criacao": "Date"
 }
 ```
 
+## 3. Coleção `reservas` (Tabela de Junção)
+Esta coleção armazena o histórico e o status das transações de reservas de alimentos efetuadas pelas ONGs.
+
+```json
+{
+  "_id": "ObjectId (Gerado automaticamente pelo MongoDB)",
+  "ong_id": "ObjectId (Referência ao _id da ONG na coleção 'usuarios')",
+  "doacao_id": "ObjectId (Referência ao _id da doação na coleção 'doacoes')",
+  "data_reserva": "Date",
+  "status": "String (Restrito a: 'PENDENTE', 'CONFIRMADA', 'CONCLUIDA', 'CANCELADA')"
+}
+```
+
 ## Relacionamentos (Referências)
-Em nosso modelo NoSQL, aplicamos o padrão de **Referências (References)** para interligar os dados sem comprometer a performance do banco:
+Em nosso modelo NoSQL, aplicamos o padrão de **Referências (References)** de forma normalizada para interligar as coleções:
 - O campo `doador_id` na coleção `doacoes` aponta para o documento criador do anúncio na coleção `usuarios`.
-- O campo `ong_reservou_id` na coleção `doacoes` aponta para a ONG na coleção `usuarios` e é preenchido no exato momento em que o `status_reserva` muda para `RESERVADA`.
+- O campo `ong_id` na coleção `reservas` aponta para a ONG (coleção `usuarios`) que iniciou a reserva.
+- O campo `doacao_id` na coleção `reservas` aponta para o item alimentício reservado (coleção `doacoes`).

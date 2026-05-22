@@ -3,6 +3,7 @@ db = db.getSiblingDB("alimentaplus_db");
 // Limpando coleções para garantir que o script rode limpo todas as vezes
 db.usuarios.drop();
 db.doacoes.drop();
+db.reservas.drop();
 
 // Inserindo o Doador (Ricardo) - Representando o Estabelecimento
 db.usuarios.insertOne({
@@ -35,8 +36,7 @@ db.doacoes.insertOne({
     categoria: "Proteínas",
     quantidade: "5kg",
     status_reserva: "DISPONIVEL",
-    ong_reservou_id: null,
     data_criacao: new Date()
 });
 
-print("Banco populado com sucesso! Usuários (Ricardo e Sandra) e Doação criados.");
+print("Banco populado com sucesso! Usuários (Ricardo e Sandra), Doação e Reservas limpas.");
