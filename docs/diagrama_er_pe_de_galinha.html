@@ -1,101 +1,111 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <title>Modelo Lógico (Pé de Galinha) - Alimenta+</title>
     <script type="module">
-      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10.8.0/dist/mermaid.esm.min.mjs';
-      mermaid.initialize({ 
-        startOnLoad: true, 
-        theme: 'base',
-        themeVariables: {
-            primaryColor: '#ffffff',
-            primaryBorderColor: '#000000',
-            primaryTextColor: '#000000',
-            lineColor: '#000000',
-            fontFamily: 'arial'
-        }
-      });
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10.8.0/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'base',
+            themeVariables: {
+                primaryColor: '#ffffff',
+                primaryBorderColor: '#000000',
+                primaryTextColor: '#000000',
+                lineColor: '#000000',
+                fontFamily: 'arial'
+            }
+        });
     </script>
     <style>
-        body { 
-            font-family: Arial, sans-serif; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             padding: 40px;
             background-color: #f4f4f9;
         }
+
         h2 {
             color: #333;
         }
-        .diagram-container { 
-            border: 2px solid #333; 
-            padding: 40px; 
-            background: white; 
-            border-radius: 8px; 
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1); 
+
+        .diagram-container {
+            border: 2px solid #333;
+            padding: 40px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
             min-width: 800px;
             display: flex;
             justify-content: center;
         }
+
         .explanation {
-            margin-top: 30px; 
-            max-width: 800px; 
-            text-align: left; 
+            margin-top: 30px;
+            max-width: 800px;
+            text-align: left;
             color: #444;
             background: #fff;
             padding: 20px;
             border-radius: 8px;
             border-left: 5px solid #10b981;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
         }
     </style>
 </head>
+
 <body>
     <h2>Modelo Lógico ER (Pé de Galinha) - Alimenta+</h2>
-    
+
     <div class="diagram-container">
         <!-- A biblioteca Mermaid renderiza a linguagem abaixo no diagrama de Pé de Galinha idêntico à imagem -->
         <div class="mermaid">
-        erDiagram
-            USUARIO ||--o{ DOACAO : "PUBLICA (Doador)"
-            USUARIO |o--o{ DOACAO : "RESERVA (ONG)"
+            erDiagram
+            USUARIO ||--o{ DOACAO : "PUBLICA (Doador) \n \n "
+            DOACAO }o--o| USUARIO : " \n \n RESERVA (ONG)"
 
             USUARIO {
-                ObjectId _id PK "id_usuario"
-                string nome
-                string tipo_perfil
-                string empresa
-                boolean aceitou_termo_juridico
-                int reputacao
-                string cep
-                string bairro
-                date data_cadastro
+            ObjectId _id PK "id_usuario"
+            string nome
+            string tipo_perfil
+            string empresa
+            boolean aceitou_termo_juridico
+            int reputacao
+            string cep
+            string bairro
+            date data_cadastro
             }
 
             DOACAO {
-                ObjectId _id PK "id_doacao"
-                ObjectId doador_id FK
-                ObjectId ong_reservou_id FK "nullable"
-                string titulo
-                string categoria
-                string quantidade
-                string status_reserva
-                date data_criacao
+            ObjectId _id PK "id_doacao"
+            ObjectId doador_id FK
+            ObjectId ong_reservou_id FK "nullable"
+            string titulo
+            string categoria
+            string quantidade
+            string status_reserva
+            date data_criacao
             }
         </div>
     </div>
 
     <div class="explanation">
-        <h3>💡 Sobre este Modelo Lógico para o Professor:</h3>
-        <p>Embora o nosso projeto utilize <strong>MongoDB (NoSQL)</strong>, é super comum na academia pedirmos o modelo relacional (ER) para comprovar que a equipe entende a estrutura lógica dos dados antes de implementá-los.</p>
+        <h3>💡 Sobre este Modelo Lógico:</h3>
+        <p>Embora o nosso projeto utilize <strong>MongoDB (NoSQL)</strong>, é super comum na academia pedirmos o modelo
+            relacional (ER) para comprovar que a equipe entende a estrutura lógica dos dados antes de implementá-los.
+        </p>
         <p>Neste diagrama em Pé de Galinha, nós mostramos as seguintes Cardinalidades:</p>
         <ul>
-            <li><strong>1 para N (1:N) - PUBLICA:</strong> 1 Usuário (do tipo Doador) pode publicar 0 ou N Doações. O campo <code>doador_id</code> na Doação é a Chave Estrangeira (FK).</li>
-            <li><strong>1 para N (1:N) - RESERVA:</strong> 1 Usuário (do tipo ONG) pode reservar 0 ou N Doações. O campo <code>ong_reservou_id</code> é a FK (podendo ser nula se a doação ainda estiver DISPONIVEL).</li>
+            <li><strong>1 para N (1:N) - PUBLICA:</strong> 1 Usuário (do tipo Doador) pode publicar 0 ou N Doações. O
+                campo <code>doador_id</code> na Doação é a Chave Estrangeira (FK).</li>
+            <li><strong>1 para N (1:N) - RESERVA:</strong> 1 Usuário (do tipo ONG) pode reservar 0 ou N Doações. O campo
+                <code>ong_reservou_id</code> é a FK (podendo ser nula se a doação ainda estiver DISPONIVEL).</li>
         </ul>
-        <p><i>Você pode tirar um print do diagrama acima e colocar no trabalho do professor!</i></p>
+
     </div>
 </body>
+
 </html>
