@@ -64,47 +64,50 @@
         <!-- A biblioteca Mermaid renderiza a linguagem abaixo no diagrama de Pé de Galinha idêntico à imagem -->
         <div class="mermaid">
             erDiagram
-            USUARIO ||--o{ DOACAO : "PUBLICA (Doador) \n \n "
-            DOACAO }o--o| USUARIO : " \n \n RESERVA (ONG)"
+            USUARIO ||--o{ DOACAO : "PUBLICA (Doador)"
+            USUARIO ||--o{ RESERVA : "SOLICITA (ONG)"
+            DOACAO ||--o{ RESERVA : "GERA"
 
             USUARIO {
-            ObjectId _id PK "id_usuario"
-            string nome
-            string tipo_perfil
-            string empresa
-            boolean aceitou_termo_juridico
-            int reputacao
-            string cep
-            string bairro
-            date data_cadastro
+                ObjectId _id PK "id_usuario"
+                string nome
+                string tipo_perfil
+                string empresa
+                boolean aceitou_termo_juridico
+                int reputacao
+                string cep
+                string bairro
+                date data_cadastro
             }
 
             DOACAO {
-            ObjectId _id PK "id_doacao"
-            ObjectId doador_id FK
-            ObjectId ong_reservou_id FK "nullable"
-            string titulo
-            string categoria
-            string quantidade
-            string status_reserva
-            date data_criacao
+                ObjectId _id PK "id_doacao"
+                ObjectId doador_id FK "ponteiro_usuario"
+                string titulo
+                string categoria
+                string quantidade
+                string status_reserva
+                date data_criacao
+            }
+
+            RESERVA {
+                ObjectId _id PK "id_reserva"
+                ObjectId ong_id FK "ponteiro_usuario"
+                ObjectId doacao_id FK "ponteiro_doacao"
+                date data_reserva
+                string status
             }
         </div>
     </div>
 
     <div class="explanation">
         <h3>💡 Sobre este Modelo Lógico:</h3>
-        <p>Embora o nosso projeto utilize <strong>MongoDB (NoSQL)</strong>, é super comum na academia pedirmos o modelo
-            relacional (ER) para comprovar que a equipe entende a estrutura lógica dos dados antes de implementá-los.
-        </p>
+        <p>Embora o nosso projeto utilize <strong>MongoDB (NoSQL)</strong>, este modelo relacional ilustra a estrutura física utilizando uma tabela de junção para a transação de reservas, conectando as partes por ponteiros (Chaves Estrangeiras).</p>
         <p>Neste diagrama em Pé de Galinha, nós mostramos as seguintes Cardinalidades:</p>
         <ul>
-            <li><strong>1 para N (1:N) - PUBLICA:</strong> 1 Usuário (do tipo Doador) pode publicar 0 ou N Doações. O
-                campo <code>doador_id</code> na Doação é a Chave Estrangeira (FK).</li>
-            <li><strong>1 para N (1:N) - RESERVA:</strong> 1 Usuário (do tipo ONG) pode reservar 0 ou N Doações. O campo
-                <code>ong_reservou_id</code> é a FK (podendo ser nula se a doação ainda estiver DISPONIVEL).</li>
+            <li><strong>USUARIO para DOACAO (1:N):</strong> 1 Usuário (Doador) publica 0 ou N Doações. O campo <code>doador_id</code> aponta para o ID do usuário correspondente.</li>
+            <li><strong>RESERVA (Tabela de Junção):</strong> A entidade <code>RESERVA</code> vincula uma transação contendo os ponteiros <code>ong_id</code> (aponta para quem está reservando na tabela USUARIO) e <code>doacao_id</code> (aponta para o item reservado na tabela DOACAO).</li>
         </ul>
-
     </div>
 </body>
 
