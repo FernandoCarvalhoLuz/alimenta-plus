@@ -1,0 +1,55 @@
+// 1. Importações Necessárias
+const express = require('express');
+const router = express.Router();
+const Usuario = require('../models/Usuario'); // Importa o esquema de dados do Usuário
+
+// 2. Rota de Criação de Usuário (POST)
+// O Express vai direcionar requisições POST para esta função.
+// Usamos "async" porque salvar no banco de dados na nuvem é uma operação que demora (assíncrona).
+router.post('/', async (req, res) => {
+    try {
+        // Desestrutura os dados enviados pela tela do Vue (que chegam no "body" da requisição)
+        const { nome, tipo_perfil, empresa, documento, aceitou_termo_juridico, endereco } = req.body;
+
+        // VALIDAÇÃO BÁSICA
+        if (!documento) {
+            return res.status(400).json({ error: "O CPF ou CNPJ (documento) é obrigatório para identificação." });
+        }
+
+        // VALIDAÇÃO JURÍDICA (Requisito da Onda 1)
+        // Se a pessoa desativou o checkbox burlado a tela, o servidor barra aqui
+        if (!aceitou_termo_juridico) {
+            return res.status(400).json({ error: "É obrigatório aceitar o Termo de Segurança Jurídica." });
+        }
+
+        // 3. Criando o documento do Mongoose com os dados validados
+        const novoUsuario = new Usuario({
+            nome,
+            tipo_perfil,
+            empresa,
+            documento,
+            aceitou_termo_juridico,
+            endereco
+        });
+
+        // 4. Salvando fisicamente no MongoDB Atlas na nuvem
+        // O "await" faz o Node esperar a nuvem confirmar que salvou para poder continuar
+        await novoUsuario.save();
+
+        // 5. Retorna sucesso para o Vue com o status 201 (Created / Criado com sucesso)
+        res.status(201).json({ 
+            message: "Usuário cadastrado com sucesso!", 
+            usuario: novoUsuario 
+        });
+
+    } catch (error) {
+        // Se houver qualquer falha (ex: campo obrigatório faltando ou sem internet), cai no catch
+        res.status(500).json({ 
+            error: "Erro interno ao cadastrar usuário.", 
+            detalhes: error.message 
+        });
+    }
+});
+
+// 6. Exportação do Roteador
+module.exports = router;
