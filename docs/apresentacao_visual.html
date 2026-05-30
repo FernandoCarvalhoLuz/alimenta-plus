@@ -912,13 +912,25 @@ router.post('/', async (req, res) => {
             return res.status(400).json({ error: "O CPF ou CNPJ (documento) é obrigatório." });
         }
 
+        // Limpa o documento removendo qualquer caractere não numérico (pontos, traços, barras)
+        const documentoLimpo = documento.toString().replace(/\D/g, '');
+
+        if (documentoLimpo.length !== 11 && documentoLimpo.length !== 14) {
+            return res.status(400).json({ error: "O documento deve possuir exatamente 11 dígitos (CPF) ou 14 dígitos (CNPJ)." });
+        }
+
         // VALIDAÇÃO JURÍDICA JÁ NO SERVIDOR
         if (!aceitou_termo_juridico) {
             return res.status(400).json({ error: "É obrigatório aceitar o Termo de Segurança Jurídica." });
         }
 
         const novoUsuario = new Usuario({
-            nome, tipo_perfil, empresa, documento, aceitou_termo_juridico, endereco
+            nome,
+            tipo_perfil,
+            empresa,
+            documento: documentoLimpo, // Salva o documento limpo (sem traços/pontos)
+            aceitou_termo_juridico,
+            endereco
         });
 
         await novoUsuario.save(); // Salva fisicamente no Atlas
@@ -998,6 +1010,25 @@ const form = ref({
 });
 const exibirModalTermos = ref(false);
 
+// Função de máscara de CPF e CNPJ no input
+const aplicarMascaraDocumento = (event) => {
+  let valor = event.target.value.replace(/\D/g, '');
+  if (valor.length > 14) valor = valor.slice(0, 14);
+  if (valor.length <= 11) {
+    // CPF
+    valor = valor.replace(/(\d{3})(\d)/, '$1.$2');
+    valor = valor.replace(/(\d{3})(\d)/, '$1.$2');
+    valor = valor.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+  } else {
+    // CNPJ
+    valor = valor.replace(/^(\d{2})(\d)/, '$1.$2');
+    valor = valor.replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3');
+    valor = valor.replace(/\.(\d{3})(\d)/, '.$1/$2');
+    valor = valor.replace(/(\d{4})(\d{1,2})$/, '$1-$2');
+  }
+  form.value.documento = valor;
+};
+
 // Busca o CEP na API ViaCEP do governo
 const buscarCep = async () => {
   const cep = form.value.endereco.cep.replace(/\D/g, '');
@@ -1015,10 +1046,16 @@ const buscarCep = async () => {
 // Dispara o cadastro para o Express
 const cadastrar = async () => {
   try {
+    // Limpa o documento antes de enviar para salvar no banco sem traços/pontos
+    const payloadEnvio = {
+      ...form.value,
+      documento: form.value.documento.replace(/\D/g, '')
+    };
+
     const response = await fetch('http://localhost:3000/api/usuarios', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(form.value)
+      body: JSON.stringify(payloadEnvio)
     });
     const data = await response.json();
     if (response.ok) {

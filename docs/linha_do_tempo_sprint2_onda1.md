@@ -125,6 +125,13 @@ router.post('/', async (req, res) => {
             return res.status(400).json({ error: "O CPF ou CNPJ (documento) é obrigatório." });
         }
 
+        // Limpa o documento removendo qualquer caractere não numérico (pontos, traços, barras)
+        const documentoLimpo = documento.toString().replace(/\D/g, '');
+
+        if (documentoLimpo.length !== 11 && documentoLimpo.length !== 14) {
+            return res.status(400).json({ error: "O documento deve possuir exatamente 11 dígitos (CPF) ou 14 dígitos (CNPJ)." });
+        }
+
         // VALIDAÇÃO JURÍDICA JÁ NO SERVIDOR
         if (!aceitou_termo_juridico) {
             return res.status(400).json({ error: "É obrigatório aceitar o Termo de Segurança Jurídica." });
@@ -135,7 +142,7 @@ router.post('/', async (req, res) => {
             nome,
             tipo_perfil,
             empresa,
-            documento,
+            documento: documentoLimpo, // Salva o documento limpo (somente números)
             aceitou_termo_juridico,
             endereco
         });
@@ -199,11 +206,17 @@ const buscarCep = async () => {
 // FUNÇÃO DE CADASTRO
 const cadastrar = async () => {
   try {
+    // Cria uma cópia limpa removendo pontos/traços do documento antes do envio
+    const payloadEnvio = {
+      ...form.value,
+      documento: form.value.documento.replace(/\D/g, '')
+    };
+
     // Dispara as informações do formulário para o nosso servidor na porta 3000
     const response = await fetch('http://localhost:3000/api/usuarios', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(form.value) // Converte as variáveis do Vue em texto puro (JSON)
+      body: JSON.stringify(payloadEnvio) // Converte as variáveis do Vue em texto puro (JSON)
     });
 
     const data = await response.json();

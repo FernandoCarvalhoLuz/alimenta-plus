@@ -13,6 +13,27 @@ const form = ref({
 
 const exibirModalTermos = ref(false);
 
+const aplicarMascaraDocumento = (event) => {
+  let valor = event.target.value.replace(/\D/g, ''); // Remove caracteres não numéricos
+  if (valor.length > 14) {
+    valor = valor.slice(0, 14); // Limita ao máximo de 14 dígitos (CNPJ)
+  }
+
+  if (valor.length <= 11) {
+    // CPF: 000.000.000-00
+    valor = valor.replace(/(\d{3})(\d)/, '$1.$2');
+    valor = valor.replace(/(\d{3})(\d)/, '$1.$2');
+    valor = valor.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+  } else {
+    // CNPJ: 00.000.000/0000-00
+    valor = valor.replace(/^(\d{2})(\d)/, '$1.$2');
+    valor = valor.replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3');
+    valor = valor.replace(/\.(\d{3})(\d)/, '.$1/$2');
+    valor = valor.replace(/(\d{4})(\d{1,2})$/, '$1-$2');
+  }
+  form.value.documento = valor;
+};
+
 const buscarCep = async () => {
   const cep = form.value.endereco.cep.replace(/\D/g, '');
   if (cep.length !== 8) return;
@@ -31,10 +52,16 @@ const buscarCep = async () => {
 
 const cadastrar = async () => {
   try {
+    // Criamos uma cópia limpa do formulário removendo pontos, traços e barras do documento antes de salvar no banco
+    const payloadEnvio = {
+      ...form.value,
+      documento: form.value.documento.replace(/\D/g, '')
+    };
+
     const response = await fetch('http://localhost:3000/api/usuarios', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(form.value)
+      body: JSON.stringify(payloadEnvio)
     });
 
     const data = await response.json();
@@ -95,7 +122,7 @@ const cadastrar = async () => {
         <!-- Campo CPF ou CNPJ -->
         <div class="form-group">
           <label>CPF ou CNPJ (Identificação)</label>
-          <input type="text" v-model="form.documento" placeholder="000.000.000-00 ou 00.000.000/0000-00" required />
+          <input type="text" v-model="form.documento" @input="aplicarMascaraDocumento" placeholder="000.000.000-00 ou 00.000.000/0000-00" required />
         </div>
 
         <!-- Endereço com ViaCEP -->

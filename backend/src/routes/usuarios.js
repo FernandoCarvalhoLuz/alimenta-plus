@@ -16,6 +16,13 @@ router.post('/', async (req, res) => {
             return res.status(400).json({ error: "O CPF ou CNPJ (documento) é obrigatório para identificação." });
         }
 
+        // Limpa o documento removendo qualquer caractere não numérico (pontos, traços, barras)
+        const documentoLimpo = documento.toString().replace(/\D/g, '');
+
+        if (documentoLimpo.length !== 11 && documentoLimpo.length !== 14) {
+            return res.status(400).json({ error: "O documento deve possuir exatamente 11 dígitos (CPF) ou 14 dígitos (CNPJ)." });
+        }
+
         // VALIDAÇÃO JURÍDICA (Requisito da Onda 1)
         // Se a pessoa desativou o checkbox burlado a tela, o servidor barra aqui
         if (!aceitou_termo_juridico) {
@@ -27,7 +34,7 @@ router.post('/', async (req, res) => {
             nome,
             tipo_perfil,
             empresa,
-            documento,
+            documento: documentoLimpo, // Salvamos o documento 100% limpo no banco
             aceitou_termo_juridico,
             endereco
         });
