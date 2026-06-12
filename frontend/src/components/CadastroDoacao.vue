@@ -58,12 +58,10 @@ const publicarDoacao = async () => {
     if (response.ok) {
       emit('notify', { message: "Doação publicada com sucesso no feed!", type: 'success' });
       
-      // Reseta os campos do formulário
       form.value.titulo = '';
       form.value.quantidade = '';
       form.value.instrucoes_retirada = '';
 
-      // Atualiza a lista na tela
       carregarHistorico();
     } else {
       emit('notify', { message: data.error || "Erro ao publicar doação.", type: 'error' });
@@ -85,11 +83,7 @@ const confirmarColeta = async (doacaoId) => {
 
     if (response.ok) {
       emit('notify', { message: "Entrega concluída! Sua reputação subiu.", type: 'success' });
-      
-      // Atualiza os dados locais do doador (para ver a reputação subindo na tela)
       atualizarDadosUsuario();
-      
-      // Atualiza o histórico
       carregarHistorico();
     } else {
       emit('notify', { message: data.error || "Erro ao confirmar coleta.", type: 'error' });
@@ -115,7 +109,6 @@ const atualizarDadosUsuario = async () => {
   }
 };
 
-// Helper para desenhar as estrelas da reputação baseada no número
 const obterEstrelas = (num) => {
   const nota = Math.round(num || 5);
   return '⭐'.repeat(nota) + '☆'.repeat(5 - nota);
@@ -148,7 +141,7 @@ const obterEstrelas = (num) => {
 
           <form @submit.prevent="publicarDoacao">
             <div class="form-group">
-              <label for="titulo-alimento">O que você vai doação?</label>
+              <label for="titulo-alimento">O que você vai doar?</label>
               <input 
                 type="text" 
                 id="titulo-alimento" 
@@ -223,7 +216,7 @@ const obterEstrelas = (num) => {
                 <small class="time">Publicado em: {{ new Date(item.data_criacao).toLocaleDateString() }}</small>
               </div>
 
-              <!-- Se estiver reservado pela ONG, permite confirmar a coleta física (Confirmação) -->
+              <!-- Se estiver reservado pela ONG, permite confirmar a coleta física -->
               <div v-if="item.status_reserva === 'RESERVADA'" class="action-box">
                 <p class="reserve-alert">⚠️ A coleta foi agendada por uma ONG parceira!</p>
                 <button @click="confirmarColeta(item._id)" class="btn-confirm">Confirmar Entrega / Coleta 🤝</button>
@@ -241,46 +234,47 @@ const obterEstrelas = (num) => {
   max-width: 1100px;
   margin: 0 auto;
   padding: 30px 20px;
-  font-family: sans-serif;
-  color: #f8fafc;
+  color: #1e293b;
 }
 
-/* Resumo do Perfil */
+/* Painel de Resumo do Doador - Gradiente Laranja Claro */
 .summary-section {
   margin-bottom: 30px;
 }
 
 .welcome-card {
-  background: linear-gradient(135deg, rgba(20, 28, 48, 0.7), rgba(30, 41, 59, 0.5));
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 16px;
-  padding: 25px 35px;
+  background: linear-gradient(135deg, #fff7ed, #ffedd5);
+  border: 1px solid rgba(249, 115, 22, 0.25);
+  border-radius: 24px;
+  padding: 30px 40px;
   position: relative;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 25px rgba(249, 115, 22, 0.08);
 }
 
 .user-badge {
   position: absolute;
-  top: 25px;
-  right: 35px;
-  background: rgba(16, 185, 129, 0.15);
-  color: #10b981;
-  border: 1px solid rgba(16, 185, 129, 0.3);
-  padding: 4px 12px;
+  top: 30px;
+  right: 40px;
+  background: #f97316;
+  color: #ffffff;
+  padding: 4px 14px;
   border-radius: 20px;
   font-size: 0.75rem;
-  font-weight: bold;
+  font-weight: 700;
+  letter-spacing: 0.5px;
 }
 
 h2 {
   font-size: 1.8rem;
+  color: #ea580c;
+  font-weight: 700;
   margin-bottom: 5px;
 }
 
 .company-name {
-  color: #cbd5e1;
-  font-size: 0.95rem;
+  color: #475569;
+  font-size: 1rem;
+  font-weight: 600;
   margin-bottom: 15px;
 }
 
@@ -288,22 +282,24 @@ h2 {
   display: flex;
   align-items: center;
   gap: 10px;
-  background: rgba(15, 23, 42, 0.4);
-  padding: 8px 15px;
-  border-radius: 8px;
+  background: #ffffff;
+  padding: 8px 18px;
+  border-radius: 12px;
   width: fit-content;
-  border: 1px solid rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(249, 115, 22, 0.15);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
 }
 
 .stars {
-  color: #eab308; /* Dourado */
+  color: #f59e0b; /* Amarelo */
   letter-spacing: 2px;
   font-size: 1.1rem;
 }
 
 .rating-text {
   font-size: 0.85rem;
-  color: #94a3b8;
+  color: #475569;
+  font-weight: 600;
 }
 
 /* Grid Layout */
@@ -319,24 +315,24 @@ h2 {
   }
 }
 
-/* Card Genérico */
+/* Card Branco com Borda Suave */
 .card-express, .card-history {
-  background: rgba(20, 28, 48, 0.65);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 16px;
-  padding: 30px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  background: #ffffff;
+  border: 1px solid rgba(220, 205, 185, 0.4);
+  border-radius: 24px;
+  padding: 35px;
+  box-shadow: 0 10px 30px rgba(220, 205, 185, 0.18);
 }
 
 h3 {
-  color: #10b981;
-  font-size: 1.3rem;
+  color: #ea580c;
+  font-size: 1.35rem;
+  font-weight: 700;
   margin-bottom: 5px;
 }
 
 .section-desc {
-  color: #94a3b8;
+  color: #64748b;
   font-size: 0.85rem;
   margin-bottom: 25px;
 }
@@ -349,53 +345,53 @@ h3 {
 }
 
 label {
-  color: #cbd5e1;
-  font-size: 0.8rem;
-  font-weight: 600;
+  color: #475569;
+  font-size: 0.85rem;
+  font-weight: 700;
   margin-bottom: 8px;
 }
 
 input, select, textarea {
-  background: #0b111e;
-  border: 1px solid #1e293b;
-  color: #f8fafc;
-  padding: 10px 14px;
-  border-radius: 8px;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  color: #1e293b;
+  padding: 11px 15px;
+  border-radius: 12px;
   font-size: 0.9rem;
   outline: none;
-  font-family: sans-serif;
+  font-family: 'Quicksand', sans-serif;
   transition: all 0.2s ease;
 }
 
 input:focus, select:focus, textarea:focus {
-  border-color: #10b981;
-  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+  border-color: #f97316;
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.15);
 }
 
 .btn-post {
   width: 100%;
-  background: linear-gradient(135deg, #10b981, #3b82f6);
+  background: linear-gradient(135deg, #f97316, #facc15);
   border: none;
   color: white;
-  padding: 12px;
-  border-radius: 8px;
-  font-size: 0.95rem;
-  font-weight: bold;
+  padding: 13px;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 700;
+  font-family: 'Quicksand', sans-serif;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);
+  box-shadow: 0 4px 15px rgba(249, 115, 22, 0.25);
 }
 
 .btn-post:hover {
-  opacity: 0.95;
   transform: translateY(-1px);
-  box-shadow: 0 6px 16px rgba(16, 185, 129, 0.25);
+  box-shadow: 0 6px 20px rgba(249, 115, 22, 0.35);
 }
 
 /* Histórico */
 .loading, .empty-state {
   text-align: center;
-  color: #94a3b8;
+  color: #64748b;
   padding: 40px 0;
   font-size: 0.9rem;
 }
@@ -414,28 +410,32 @@ input:focus, select:focus, textarea:focus {
 }
 
 .history-list::-webkit-scrollbar-thumb {
-  background: #1f2937;
+  background: #ede6db;
   border-radius: 3px;
 }
 
 .history-card {
-  background: #0b111e;
-  border-radius: 10px;
-  padding: 15px;
-  border-left: 4px solid #94a3b8;
+  background: #fdfbf7;
+  border-radius: 16px;
+  padding: 20px;
+  border: 1px solid rgba(220, 205, 185, 0.3);
+  border-left: 5px solid #64748b;
   transition: all 0.2s ease;
 }
 
 .history-card.disponivel {
-  border-left-color: #10b981; /* Verde */
+  border-left-color: #10b981;
+  background: #f0fdf4; /* Verde bem suave */
 }
 
 .history-card.reservada {
-  border-left-color: #3b82f6; /* Azul */
+  border-left-color: #3b82f6;
+  background: #eff6ff; /* Azul bem suave */
 }
 
 .history-card.coletada {
-  border-left-color: #64748b; /* Cinza */
+  border-left-color: #94a3b8;
+  background: #f8fafc;
   opacity: 0.7;
 }
 
@@ -447,35 +447,36 @@ input:focus, select:focus, textarea:focus {
 }
 
 .status-badge {
-  font-size: 0.7rem;
-  font-weight: bold;
-  padding: 2px 8px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 3px 10px;
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.05);
 }
 
 .disponivel .status-badge {
-  color: #10b981;
-  background: rgba(16, 185, 129, 0.1);
+  color: #15803d;
+  background: rgba(22, 163, 74, 0.1);
 }
 
 .reservada .status-badge {
-  color: #3b82f6;
-  background: rgba(59, 130, 246, 0.1);
+  color: #1d4ed8;
+  background: rgba(37, 99, 235, 0.1);
 }
 
 .coletada .status-badge {
-  color: #94a3b8;
-  background: rgba(148, 163, 184, 0.1);
+  color: #475569;
+  background: rgba(71, 85, 105, 0.1);
 }
 
 .cat-badge {
-  font-size: 0.7rem;
-  color: #64748b;
+  font-size: 0.75rem;
+  color: #475569;
+  font-weight: bold;
 }
 
 .history-title {
-  font-size: 1rem;
+  font-size: 1.05rem;
+  font-weight: 700;
   margin-bottom: 8px;
 }
 
@@ -483,23 +484,25 @@ input:focus, select:focus, textarea:focus {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 0.8rem;
-  color: #cbd5e1;
+  font-size: 0.85rem;
+  color: #475569;
 }
 
 /* Caixa de Ação de Reserva */
 .action-box {
-  background: rgba(59, 130, 246, 0.1);
+  background: #ffffff;
   border: 1px solid rgba(59, 130, 246, 0.2);
-  padding: 12px;
-  border-radius: 8px;
-  margin-top: 12px;
+  padding: 15px;
+  border-radius: 12px;
+  margin-top: 15px;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.03);
 }
 
 .reserve-alert {
-  font-size: 0.75rem;
-  color: #93c5fd;
-  margin-bottom: 8px;
+  font-size: 0.8rem;
+  color: #1d4ed8;
+  font-weight: 700;
+  margin-bottom: 10px;
   text-align: left;
 }
 
@@ -508,12 +511,14 @@ input:focus, select:focus, textarea:focus {
   background: #2563eb;
   border: none;
   color: white;
-  padding: 8px;
-  border-radius: 6px;
-  font-size: 0.85rem;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 0.9rem;
   font-weight: bold;
+  font-family: 'Quicksand', sans-serif;
   cursor: pointer;
   transition: background 0.2s;
+  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.15);
 }
 
 .btn-confirm:hover {

@@ -4,7 +4,7 @@
     <!-- Barra de Navegação Premium (Header) -->
     <header class="app-header" role="banner">
       <div class="logo-container">
-        <span class="logo-icon" aria-hidden="true">🌱</span>
+        <span class="logo-icon" aria-hidden="true">🍊</span>
         <span class="logo-text">Alimenta<span class="plus-symbol">+</span></span>
       </div>
       
@@ -91,7 +91,7 @@
       <p>&copy; 2026 Alimenta+ - Tecnologia social em prol do ODS 2 (Fome Zero).</p>
     </footer>
 
-    <!-- Sistema Premium de Notificação Toast (Substitui o alert simples) -->
+    <!-- Sistema Premium de Notificação Toast -->
     <div v-if="toast.visible" :class="toast.type" class="toast-notification" role="alert" aria-live="assertive">
       <span class="toast-icon">{{ toastIcon }}</span>
       <span class="toast-message">{{ toast.message }}</span>
@@ -118,13 +118,13 @@ const highContrast = ref(false);
 const toast = ref({
   visible: false,
   message: '',
-  type: 'success' // success, error, warning, info
+  type: 'success'
 });
 
-// Ícones dinâmicos do Toast baseados no tipo de aviso
+// Ícones dinâmicos do Toast
 const toastIcon = computed(() => {
   switch (toast.value.type) {
-    case 'success': return '✅';
+    case 'success': return '🍊';
     case 'error': return '❌';
     case 'warning': return '⚠️';
     default: return 'ℹ️';
@@ -133,7 +133,6 @@ const toastIcon = computed(() => {
 
 // 3. Funções de Ciclo de Vida & Ações
 onMounted(() => {
-  // Verifica se o usuário já estava autenticado na sessão anterior
   const session = localStorage.getItem('usuario_logado');
   if (session) {
     try {
@@ -144,14 +143,12 @@ onMounted(() => {
     }
   }
 
-  // Verifica preferência de alto contraste salva
   const contrastPref = localStorage.getItem('alto_contraste');
   if (contrastPref === 'true') {
     highContrast.value = true;
   }
 });
 
-// Direciona para a aba correta com base no perfil ao efetuar login
 const ajustarAbaPadrao = () => {
   if (usuarioLogado.value.tipo_perfil === 'DOADOR') {
     currentTab.value = 'doador';
@@ -179,7 +176,6 @@ const logout = () => {
   showToast({ message: "Sessão encerrada com sucesso.", type: 'info' });
 };
 
-// Alterna o modo de acessibilidade de alto contraste (Onda 2)
 const toggleHighContrast = () => {
   highContrast.value = !highContrast.value;
   localStorage.setItem('alto_contraste', highContrast.value.toString());
@@ -189,13 +185,11 @@ const toggleHighContrast = () => {
   });
 };
 
-// Exibe a notificação Toast premium na tela
 const showToast = ({ message, type = 'success' }) => {
   toast.value.message = message;
   toast.value.type = type;
   toast.value.visible = true;
 
-  // Fecha automaticamente a notificação após 4 segundos
   setTimeout(() => {
     toast.value.visible = false;
   }, 4000);
@@ -203,7 +197,10 @@ const showToast = ({ message, type = 'success' }) => {
 </script>
 
 <style>
-/* 1. RESET GLOBAL E FONTES */
+/* Importa a fonte amigável e arredondada Quicksand */
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap');
+
+/* 1. CONFIGURAÇÕES E RESETS GLOBAIS */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -211,9 +208,9 @@ const showToast = ({ message, type = 'success' }) => {
 }
 
 body {
-  font-family: sans-serif;
-  background-color: #060813; /* Fundo extremamente escuro e premium */
-  color: #f8fafc;
+  font-family: 'Quicksand', sans-serif;
+  background-color: #fdfbf7; /* Creme bem claro e acolhedor */
+  color: #1e293b; /* Charcoal escuro amigável */
   overflow-x: hidden;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
@@ -224,7 +221,7 @@ body {
   min-height: 100vh;
 }
 
-/* 2. HEADER MODERNO GLASSMORPHISM */
+/* 2. HEADER CLARO ORGÂNICO (Finos toques de Laranja/Bege) */
 .app-header {
   position: sticky;
   top: 0;
@@ -233,61 +230,61 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 15px 40px;
-  background: rgba(11, 15, 30, 0.85);
+  background: rgba(253, 251, 247, 0.85);
   backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid rgba(220, 205, 185, 0.25);
+  box-shadow: 0 4px 20px rgba(220, 205, 185, 0.15);
 }
 
 .logo-container {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   user-select: none;
 }
 
 .logo-icon {
-  font-size: 1.6rem;
+  font-size: 1.8rem;
 }
 
 .logo-text {
-  font-size: 1.4rem;
-  font-weight: 800;
-  letter-spacing: 0.5px;
-  color: #f8fafc;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #ea580c; /* Laranja Escuro */
 }
 
 .plus-symbol {
-  color: #10b981;
+  color: #f59e0b; /* Amarelo-Ouro */
 }
 
-/* MENU DE NAVEGAÇÃO */
+/* MENU DE ABAS */
 .nav-menu {
   display: flex;
-  gap: 10px;
+  gap: 12px;
 }
 
 .nav-btn {
   background: transparent;
   border: none;
-  color: #94a3b8;
-  padding: 8px 16px;
-  border-radius: 8px;
-  font-size: 0.9rem;
+  font-family: 'Quicksand', sans-serif;
+  color: #64748b;
+  padding: 10px 20px;
+  border-radius: 20px; /* Bem arredondado */
+  font-size: 0.95rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .nav-btn:hover {
-  color: #f8fafc;
-  background: rgba(255, 255, 255, 0.03);
+  color: #ea580c;
+  background: rgba(249, 115, 22, 0.05);
 }
 
 .nav-btn.active {
-  color: #10b981;
-  background: rgba(16, 185, 129, 0.1);
-  border: 1px solid rgba(16, 185, 129, 0.2);
+  color: #ea580c;
+  background: rgba(249, 115, 22, 0.08);
+  font-weight: 700;
 }
 
 /* AÇÕES DO HEADER */
@@ -298,11 +295,12 @@ body {
 }
 
 .btn-accessibility {
-  background: transparent;
-  border: 1px solid #1e293b;
-  color: #cbd5e1;
-  padding: 8px 14px;
-  border-radius: 6px;
+  background: #f5efe6;
+  border: 1px solid rgba(220, 205, 185, 0.5);
+  color: #475569;
+  font-family: 'Quicksand', sans-serif;
+  padding: 8px 16px;
+  border-radius: 20px;
   font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
@@ -310,8 +308,8 @@ body {
 }
 
 .btn-accessibility:hover {
-  background: rgba(255, 255, 255, 0.05);
-  color: #f8fafc;
+  background: #ede6db;
+  color: #1e293b;
 }
 
 .user-session-info {
@@ -321,18 +319,20 @@ body {
 }
 
 .user-name {
-  font-size: 0.85rem;
-  color: #94a3b8;
-  font-weight: 600;
+  font-size: 0.9rem;
+  color: #ea580c;
+  font-weight: 700;
 }
 
 .btn-logout {
-  background: rgba(239, 68, 68, 0.1);
+  background: rgba(239, 68, 68, 0.08);
   border: 1px solid rgba(239, 68, 68, 0.2);
-  color: #fca5a5;
-  padding: 5px 12px;
-  border-radius: 6px;
+  color: #ef4444;
+  padding: 6px 14px;
+  border-radius: 20px;
   font-size: 0.8rem;
+  font-weight: bold;
+  font-family: 'Quicksand', sans-serif;
   cursor: pointer;
   transition: all 0.2s ease;
 }
@@ -342,7 +342,7 @@ body {
   color: white;
 }
 
-/* 3. CONTEÚDO E FOOTER */
+/* 3. CONTEÚDO PRINCIPAL E FOOTER */
 .app-main {
   flex-grow: 1;
   display: flex;
@@ -351,14 +351,15 @@ body {
 
 .app-footer {
   text-align: center;
-  padding: 20px;
-  background: #060813;
-  color: #475569;
-  font-size: 0.75rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.02);
+  padding: 25px;
+  background: #f5efe6;
+  color: #64748b;
+  font-size: 0.8rem;
+  font-weight: 500;
+  border-top: 1px solid rgba(220, 205, 185, 0.3);
 }
 
-/* 4. TOAST NOTIFICATION PREMIUM */
+/* 4. TOAST NOTIFICATION PREMIUM (Clara e Elegante) */
 .toast-notification {
   position: fixed;
   bottom: 25px;
@@ -367,41 +368,35 @@ body {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 15px 20px;
-  border-radius: 10px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  padding: 16px 24px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(220, 205, 185, 0.3);
   animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   max-width: 380px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: #ffffff;
+  color: #1e293b;
+  border: 1px solid rgba(220, 205, 185, 0.4);
 }
 
 .toast-notification.success {
-  background: #064e3b;
-  color: #a7f3d0;
-  border-left: 5px solid #10b981;
+  border-left: 5px solid #f97316; /* Laranja */
 }
 
 .toast-notification.error {
-  background: #7f1d1d;
-  color: #fecaca;
   border-left: 5px solid #ef4444;
 }
 
 .toast-notification.warning {
-  background: #78350f;
-  color: #fde68a;
   border-left: 5px solid #f59e0b;
 }
 
 .toast-notification.info {
-  background: #1e1b4b;
-  color: #c7d2fe;
-  border-left: 5px solid #6366f1;
+  border-left: 5px solid #3b82f6;
 }
 
 .toast-message {
-  font-size: 0.85rem;
-  font-weight: 500;
+  font-size: 0.9rem;
+  font-weight: 600;
   line-height: 1.4;
   flex-grow: 1;
 }
@@ -409,14 +404,15 @@ body {
 .toast-close-btn {
   background: transparent;
   border: none;
-  color: inherit;
-  font-size: 1.2rem;
+  color: #94a3b8;
+  font-size: 1.3rem;
   cursor: pointer;
   opacity: 0.7;
   transition: opacity 0.2s;
 }
 
 .toast-close-btn:hover {
+  color: #1e293b;
   opacity: 1;
 }
 

@@ -88,7 +88,6 @@ const realizarCadastro = async () => {
 
     if (response.ok) {
       emit('notify', { message: "Conta criada com sucesso!", type: 'success' });
-      // Loga automaticamente o usuário cadastrado
       emit('login-success', data.usuario);
     } else {
       emit('notify', { message: data.error || "Erro ao criar conta.", type: 'error' });
@@ -264,24 +263,24 @@ const realizarLogin = async () => {
   justify-content: center;
   align-items: center;
   min-height: 80vh;
-  padding: 20px;
+  padding: 30px 20px;
 }
 
+/* Card Branco com Borda Suave Sand */
 .auth-card {
-  background: rgba(20, 28, 48, 0.65);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 16px;
+  background: #ffffff;
+  border: 1px solid rgba(220, 205, 185, 0.4);
+  border-radius: 24px; /* Mais arredondado / orgânico */
   width: 100%;
   max-width: 480px;
   overflow: hidden;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 10px 30px rgba(220, 205, 185, 0.25);
 }
 
 .auth-tabs {
   display: flex;
-  background: rgba(15, 23, 42, 0.4);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  background: #fdfbf7;
+  border-bottom: 1px solid rgba(220, 205, 185, 0.3);
 }
 
 .tab-btn {
@@ -289,6 +288,7 @@ const realizarLogin = async () => {
   padding: 15px;
   background: transparent;
   border: none;
+  font-family: 'Quicksand', sans-serif;
   color: #64748b;
   cursor: pointer;
   font-weight: bold;
@@ -297,28 +297,30 @@ const realizarLogin = async () => {
 }
 
 .tab-btn:hover {
-  color: #f8fafc;
+  color: #ea580c;
+  background: rgba(249, 115, 22, 0.03);
 }
 
 .tab-btn.active {
-  color: #10b981;
-  background: rgba(20, 28, 48, 0.8);
-  border-bottom: 2px solid #10b981;
+  color: #ea580c;
+  background: #ffffff;
+  border-bottom: 3px solid #f97316;
 }
 
 .form-section {
-  padding: 30px;
+  padding: 35px;
 }
 
 h2 {
-  color: #10b981;
+  color: #ea580c;
   font-size: 1.6rem;
+  font-weight: 700;
   margin-bottom: 5px;
   text-align: center;
 }
 
 .subtitle {
-  color: #94a3b8;
+  color: #64748b;
   font-size: 0.85rem;
   text-align: center;
   margin-bottom: 25px;
@@ -341,27 +343,28 @@ h2 {
 }
 
 label {
-  color: #cbd5e1;
-  font-size: 0.8rem;
-  font-weight: 600;
+  color: #475569;
+  font-size: 0.85rem;
+  font-weight: 700;
   margin-bottom: 6px;
   text-align: left;
 }
 
 input, select {
-  background: #0b111e;
-  border: 1px solid #1e293b;
-  color: #f8fafc;
-  padding: 10px 14px;
-  border-radius: 8px;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  color: #1e293b;
+  padding: 11px 15px;
+  border-radius: 12px; /* Arredondado amigável */
   font-size: 0.9rem;
+  font-family: 'Quicksand', sans-serif;
   outline: none;
   transition: all 0.2s ease;
 }
 
 input:focus, select:focus {
-  border-color: #10b981;
-  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+  border-color: #f97316;
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.15);
 }
 
 .checkbox-group {
@@ -372,44 +375,47 @@ input:focus, select:focus {
 }
 
 .checkbox-group input {
-  width: 16px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
   cursor: pointer;
+  accent-color: #f97316;
 }
 
 .checkbox-text {
-  font-size: 0.8rem;
-  color: #cbd5e1;
+  font-size: 0.85rem;
+  color: #475569;
 }
 
 .link-termos {
-  color: #10b981;
+  color: #ea580c;
   text-decoration: underline;
   cursor: pointer;
+  font-weight: 600;
 }
 
 .link-termos:hover {
-  color: #3b82f6;
+  color: #c2410c;
 }
 
+/* Botão Encorpado Laranja-Solar */
 .btn-submit {
   width: 100%;
-  background: linear-gradient(135deg, #10b981, #3b82f6);
+  background: linear-gradient(135deg, #f97316, #facc15);
   color: #ffffff;
+  font-family: 'Quicksand', sans-serif;
   border: none;
-  padding: 12px;
-  border-radius: 8px;
-  font-size: 0.95rem;
-  font-weight: bold;
+  padding: 14px;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 700;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);
+  box-shadow: 0 4px 15px rgba(249, 115, 22, 0.2);
 }
 
 .btn-submit:hover {
-  opacity: 0.95;
   transform: translateY(-1px);
-  box-shadow: 0 6px 16px rgba(16, 185, 129, 0.25);
+  box-shadow: 0 6px 20px rgba(249, 115, 22, 0.3);
 }
 
 .btn-submit:active {
@@ -423,8 +429,8 @@ input:focus, select:focus {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(10, 15, 25, 0.9);
-  backdrop-filter: blur(6px);
+  background: rgba(30, 25, 20, 0.4);
+  backdrop-filter: blur(4px);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -432,25 +438,26 @@ input:focus, select:focus {
 }
 
 .modal-card {
-  background: #111827;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 12px;
-  padding: 25px;
+  background: #ffffff;
+  border: 1px solid rgba(220, 205, 185, 0.5);
+  border-radius: 20px;
+  padding: 30px;
   width: 90%;
-  max-width: 460px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+  max-width: 480px;
+  box-shadow: 0 20px 40px rgba(30, 25, 20, 0.15);
 }
 
 .modal-card h3 {
-  color: #10b981;
+  color: #ea580c;
+  font-size: 1.25rem;
   margin-top: 0;
   margin-bottom: 15px;
 }
 
 .modal-body {
-  color: #94a3b8;
-  font-size: 0.8rem;
-  line-height: 1.5;
+  color: #475569;
+  font-size: 0.85rem;
+  line-height: 1.6;
   max-height: 250px;
   overflow-y: auto;
   margin-bottom: 20px;
@@ -463,23 +470,24 @@ input:focus, select:focus {
 }
 
 .modal-body::-webkit-scrollbar-thumb {
-  background: #1f2937;
+  background: #ede6db;
   border-radius: 3px;
 }
 
 .btn-close {
-  background: #1f2937;
+  background: #f5efe6;
   border: none;
-  color: #f8fafc;
-  padding: 10px;
-  border-radius: 6px;
+  font-family: 'Quicksand', sans-serif;
+  color: #1e293b;
+  padding: 12px;
+  border-radius: 8px;
   width: 100%;
-  font-weight: bold;
+  font-weight: 700;
   cursor: pointer;
   transition: background 0.2s;
 }
 
 .btn-close:hover {
-  background: #374151;
+  background: #ede6db;
 }
 </style>

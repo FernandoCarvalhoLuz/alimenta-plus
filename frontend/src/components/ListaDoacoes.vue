@@ -46,7 +46,6 @@ const carregarMinhasReservas = async () => {
   }
 };
 
-// Função para recarregar tudo na tela
 const recarregarDados = () => {
   carregarFeed();
   carregarMinhasReservas();
@@ -94,10 +93,7 @@ const cancelarReserva = async (doacaoId) => {
 
     if (response.ok) {
       emit('notify', { message: "Reserva cancelada. Reputação atualizada.", type: 'warning' });
-      
-      // Sincroniza reputação local da ONG
       atualizarDadosUsuario();
-      
       recarregarDados();
     } else {
       emit('notify', { message: data.error || "Erro ao cancelar reserva.", type: 'error' });
@@ -123,7 +119,6 @@ const atualizarDadosUsuario = async () => {
   }
 };
 
-// Helper para desenhar as estrelas
 const obterEstrelas = (num) => {
   const nota = Math.round(num || 5);
   return '⭐'.repeat(nota) + '☆'.repeat(5 - nota);
@@ -207,7 +202,6 @@ const obterEstrelas = (num) => {
           </div>
 
           <div v-else class="reserves-list">
-            <!-- Cada item é um documento Reserva com o doacao_id populado -->
             <div v-for="res in minhasReservas" :key="res._id" class="reserve-item">
               <div v-if="res.doacao_id">
                 <div class="reserve-item-header">
@@ -253,8 +247,7 @@ const obterEstrelas = (num) => {
   max-width: 1100px;
   margin: 0 auto;
   padding: 30px 20px;
-  font-family: sans-serif;
-  color: #f8fafc;
+  color: #1e293b;
 }
 
 /* Painel de Boas-Vindas */
@@ -263,36 +256,38 @@ const obterEstrelas = (num) => {
 }
 
 .welcome-card {
-  background: linear-gradient(135deg, rgba(20, 28, 48, 0.7), rgba(30, 41, 59, 0.5));
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 16px;
-  padding: 25px 35px;
+  background: linear-gradient(135deg, #fff7ed, #ffedd5);
+  border: 1px solid rgba(249, 115, 22, 0.25);
+  border-radius: 24px;
+  padding: 30px 40px;
   position: relative;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 25px rgba(249, 115, 22, 0.08);
 }
 
 .user-badge {
   position: absolute;
-  top: 25px;
-  right: 35px;
-  background: rgba(59, 130, 246, 0.15);
-  color: #3b82f6;
-  border: 1px solid rgba(59, 130, 246, 0.3);
-  padding: 4px 12px;
+  top: 30px;
+  right: 40px;
+  background: #ea580c;
+  color: #ffffff;
+  padding: 4px 14px;
   border-radius: 20px;
   font-size: 0.75rem;
-  font-weight: bold;
+  font-weight: 700;
+  letter-spacing: 0.5px;
 }
 
 h2 {
   font-size: 1.8rem;
+  color: #ea580c;
+  font-weight: 700;
   margin-bottom: 5px;
 }
 
 .institution-name {
-  color: #cbd5e1;
-  font-size: 0.95rem;
+  color: #475569;
+  font-size: 1rem;
+  font-weight: 600;
   margin-bottom: 15px;
 }
 
@@ -300,22 +295,24 @@ h2 {
   display: flex;
   align-items: center;
   gap: 10px;
-  background: rgba(15, 23, 42, 0.4);
-  padding: 8px 15px;
-  border-radius: 8px;
+  background: #ffffff;
+  padding: 8px 18px;
+  border-radius: 12px;
   width: fit-content;
-  border: 1px solid rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(249, 115, 22, 0.15);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
 }
 
 .stars {
-  color: #eab308;
+  color: #f59e0b;
   letter-spacing: 2px;
   font-size: 1.1rem;
 }
 
 .rating-text {
   font-size: 0.85rem;
-  color: #94a3b8;
+  color: #475569;
+  font-weight: 600;
 }
 
 /* Grid Layout */
@@ -331,13 +328,13 @@ h2 {
   }
 }
 
+/* Card Branco com Borda Suave */
 .card-box {
-  background: rgba(20, 28, 48, 0.65);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 16px;
-  padding: 30px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  background: #ffffff;
+  border: 1px solid rgba(220, 205, 185, 0.4);
+  border-radius: 24px;
+  padding: 35px;
+  box-shadow: 0 10px 30px rgba(220, 205, 185, 0.18);
 }
 
 .card-header-main {
@@ -348,35 +345,38 @@ h2 {
 }
 
 .btn-refresh-inline {
-  background: #1e293b;
-  border: 1px solid #334155;
-  color: #cbd5e1;
-  padding: 6px 12px;
-  border-radius: 6px;
+  background: #f5efe6;
+  border: 1px solid rgba(220, 205, 185, 0.4);
+  color: #475569;
+  font-family: 'Quicksand', sans-serif;
+  padding: 6px 14px;
+  border-radius: 20px;
   cursor: pointer;
   font-size: 0.8rem;
-  font-weight: 600;
-  transition: background 0.2s;
+  font-weight: 700;
+  transition: all 0.2s;
 }
 
 .btn-refresh-inline:hover {
-  background: #334155;
+  background: #ede6db;
+  color: #1e293b;
 }
 
 h3 {
-  color: #10b981;
-  font-size: 1.3rem;
+  color: #ea580c;
+  font-size: 1.35rem;
+  font-weight: 700;
 }
 
 .section-desc {
-  color: #94a3b8;
+  color: #64748b;
   font-size: 0.85rem;
   margin-bottom: 25px;
 }
 
 .loading, .empty-state {
   text-align: center;
-  color: #94a3b8;
+  color: #64748b;
   padding: 40px 0;
   font-size: 0.9rem;
 }
@@ -396,20 +396,21 @@ h3 {
 }
 
 .feed-list::-webkit-scrollbar-thumb, .reserves-list::-webkit-scrollbar-thumb {
-  background: #1f2937;
+  background: #ede6db;
   border-radius: 3px;
 }
 
 .feed-item {
-  background: #0b111e;
-  border-radius: 10px;
-  padding: 15px;
-  border: 1px solid rgba(255, 255, 255, 0.02);
-  transition: border-color 0.2s;
+  background: #fdfbf7;
+  border-radius: 16px;
+  padding: 20px;
+  border: 1px solid rgba(220, 205, 185, 0.3);
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .feed-item:hover {
-  border-color: rgba(16, 185, 129, 0.2);
+  border-color: rgba(249, 115, 22, 0.35);
+  box-shadow: 0 4px 15px rgba(249, 115, 22, 0.04);
 }
 
 .feed-item-header, .reserve-item-header {
@@ -420,41 +421,42 @@ h3 {
 }
 
 .cat-badge {
-  font-size: 0.75rem;
-  color: #3b82f6;
-  font-weight: bold;
+  font-size: 0.8rem;
+  color: #ea580c;
+  font-weight: 700;
 }
 
 .badge-active {
-  font-size: 0.65rem;
-  color: #10b981;
-  background: rgba(16, 185, 129, 0.1);
-  padding: 2px 8px;
-  border-radius: 10px;
-  font-weight: bold;
+  font-size: 0.7rem;
+  color: #16a34a;
+  background: rgba(22, 163, 74, 0.1);
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-weight: 700;
 }
 
 .badge-pending {
-  font-size: 0.65rem;
-  color: #3b82f6;
-  background: rgba(59, 130, 246, 0.1);
-  padding: 2px 8px;
-  border-radius: 10px;
-  font-weight: bold;
+  font-size: 0.7rem;
+  color: #2563eb;
+  background: rgba(37, 99, 235, 0.1);
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-weight: 700;
 }
 
 .item-title {
   font-size: 1.1rem;
+  font-weight: 700;
   margin-bottom: 8px;
 }
 
 .item-details, .reserve-details {
-  font-size: 0.8rem;
-  color: #cbd5e1;
+  font-size: 0.85rem;
+  color: #475569;
   display: flex;
   flex-direction: column;
-  gap: 5px;
-  margin-bottom: 12px;
+  gap: 6px;
+  margin-bottom: 15px;
 }
 
 .reputation-doador {
@@ -465,57 +467,62 @@ h3 {
 }
 
 .stars-small {
-  color: #eab308;
+  color: #f59e0b;
 }
 
 .rating-small {
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   color: #64748b;
+  font-weight: 600;
 }
 
+/* Botão Laranja-Solar Encorpado */
 .btn-reserve {
   width: 100%;
-  background: linear-gradient(135deg, #10b981, #3b82f6);
+  background: linear-gradient(135deg, #f97316, #facc15);
   border: none;
   color: white;
-  padding: 8px;
-  border-radius: 6px;
+  padding: 10px;
+  border-radius: 8px;
   font-weight: bold;
+  font-family: 'Quicksand', sans-serif;
   cursor: pointer;
   transition: opacity 0.2s;
+  box-shadow: 0 4px 10px rgba(249, 115, 22, 0.2);
 }
 
 .btn-reserve:hover {
-  opacity: 0.9;
+  opacity: 0.95;
 }
 
-/* Itens de Reserva */
+/* Itens de Reserva (Fundo Laranja Claro Suave) */
 .reserve-item {
-  background: #0b111e;
-  border-radius: 10px;
-  padding: 15px;
-  border: 1px solid rgba(59, 130, 246, 0.15);
+  background: #fff7ed;
+  border-radius: 16px;
+  padding: 20px;
+  border: 1px solid rgba(249, 115, 22, 0.25);
 }
 
 .doador-info {
-  background: rgba(15, 23, 42, 0.5);
-  padding: 8px 10px;
-  border-radius: 6px;
+  background: #ffffff;
+  border: 1px solid rgba(249, 115, 22, 0.1);
+  padding: 10px 12px;
+  border-radius: 8px;
   margin: 5px 0;
 }
 
 .instruction-box {
-  background: rgba(245, 158, 11, 0.05);
-  border: 1px solid rgba(245, 158, 11, 0.15);
-  padding: 10px;
-  border-radius: 6px;
+  background: #ffffff;
+  border: 1px solid rgba(245, 158, 11, 0.2);
+  padding: 12px;
+  border-radius: 8px;
   margin-top: 5px;
   text-align: left;
 }
 
 .inst-text {
   font-style: italic;
-  color: #94a3b8;
+  color: #64748b;
   margin-top: 4px;
 }
 
@@ -523,17 +530,17 @@ h3 {
   width: 100%;
   background: transparent;
   border: 1px solid #ef4444;
-  color: #fca5a5;
-  padding: 8px;
-  border-radius: 6px;
+  color: #ef4444;
+  padding: 10px;
+  border-radius: 8px;
   font-weight: bold;
+  font-family: 'Quicksand', sans-serif;
   cursor: pointer;
-  margin-top: 10px;
+  margin-top: 12px;
   transition: all 0.2s ease;
 }
 
 .btn-cancel:hover {
-  background: rgba(239, 68, 68, 0.1);
-  color: #ef4444;
+  background: rgba(239, 68, 68, 0.05);
 }
 </style>

@@ -46,14 +46,14 @@ onMounted(() => {
         
         <!-- Grid de Números de Usuários -->
         <div class="users-grid">
-          <div class="stat-card blue">
-            <span class="icon">🏢</span>
+          <div class="stat-card orange">
+            <span class="icon">🍊</span>
             <h4>Doadores Ativos</h4>
             <div class="number">{{ stats.totalDoadores }}</div>
             <p class="desc">Estabelecimentos comerciais cadastrados</p>
           </div>
           
-          <div class="stat-card green">
+          <div class="stat-card yellow">
             <span class="icon">🤝</span>
             <h4>ONGs Receptoras</h4>
             <div class="number">{{ stats.totalONGS }}</div>
@@ -65,7 +65,7 @@ onMounted(() => {
         <div class="food-grid">
           <div class="food-card">
             <h4>Total de Doações Lançadas</h4>
-            <div class="number green-gradient-text">{{ stats.totalDoacoes }}</div>
+            <div class="number orange-gradient-text">{{ stats.totalDoacoes }}</div>
             <p class="desc">Alimentos resgatados do desperdício</p>
           </div>
 
@@ -113,44 +113,46 @@ onMounted(() => {
   max-width: 900px;
   margin: 0 auto;
   padding: 30px 20px;
-  font-family: sans-serif;
-  color: #f8fafc;
+  color: #1e293b;
 }
 
 h2 {
-  color: #10b981;
+  color: #ea580c;
+  font-weight: 700;
   text-align: center;
   margin-bottom: 5px;
 }
 
 .subtitle {
-  color: #94a3b8;
+  color: #64748b;
   text-align: center;
   margin-bottom: 25px;
   font-size: 0.95rem;
 }
 
 .btn-refresh {
-  background: #1e293b;
-  border: 1px solid #334155;
-  color: #cbd5e1;
-  padding: 8px 16px;
-  border-radius: 6px;
+  background: #f5efe6;
+  border: 1px solid rgba(220, 205, 185, 0.4);
+  color: #475569;
+  font-family: 'Quicksand', sans-serif;
+  padding: 10px 20px;
+  border-radius: 20px;
   cursor: pointer;
-  font-weight: 600;
+  font-weight: 700;
   display: block;
   margin: 0 auto 30px auto;
-  transition: background 0.2s;
+  transition: all 0.2s;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
 }
 
 .btn-refresh:hover {
-  background: #334155;
-  color: #f8fafc;
+  background: #ede6db;
+  color: #1e293b;
 }
 
 .loading {
   text-align: center;
-  color: #94a3b8;
+  color: #64748b;
   padding: 40px;
 }
 
@@ -174,22 +176,21 @@ h2 {
 }
 
 .stat-card {
-  background: rgba(20, 28, 48, 0.65);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 16px;
+  background: #ffffff;
+  border: 1px solid rgba(220, 205, 185, 0.4);
+  border-radius: 24px;
   padding: 25px;
   text-align: center;
   position: relative;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 25px rgba(220, 205, 185, 0.15);
 }
 
-.stat-card.blue {
-  border-left: 4px solid #3b82f6;
+.stat-card.orange {
+  border-left: 4px solid #ea580c;
 }
 
-.stat-card.green {
-  border-left: 4px solid #10b981;
+.stat-card.yellow {
+  border-left: 4px solid #f59e0b;
 }
 
 .icon {
@@ -199,20 +200,21 @@ h2 {
 }
 
 h4 {
-  color: #94a3b8;
-  font-size: 0.9rem;
+  color: #64748b;
+  font-size: 0.95rem;
+  font-weight: 700;
   margin-bottom: 8px;
 }
 
 .number {
   font-size: 2.2rem;
   font-weight: bold;
-  color: #f8fafc;
+  color: #ea580c;
   margin-bottom: 5px;
 }
 
-.green-gradient-text {
-  background: linear-gradient(135deg, #10b981, #3b82f6);
+.orange-gradient-text {
+  background: linear-gradient(135deg, #f97316, #facc15);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -220,20 +222,20 @@ h4 {
 .desc {
   font-size: 0.75rem;
   color: #64748b;
+  font-weight: 600;
 }
 
 /* Bloco de doações */
 .food-grid {
-  background: rgba(20, 28, 48, 0.65);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 16px;
+  background: #ffffff;
+  border: 1px solid rgba(220, 205, 185, 0.4);
+  border-radius: 24px;
   padding: 30px;
   display: grid;
   grid-template-columns: 1fr 1.2fr;
   gap: 30px;
   align-items: center;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 25px rgba(220, 205, 185, 0.15);
 }
 
 @media (max-width: 600px) {
@@ -253,35 +255,37 @@ h4 {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #0b111e;
-  padding: 10px 15px;
-  border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.02);
+  background: #fdfbf7;
+  padding: 12px 18px;
+  border-radius: 12px;
+  border: 1px solid rgba(220, 205, 185, 0.3);
 }
 
 .detail-row .label {
-  font-size: 0.85rem;
-  color: #cbd5e1;
+  font-size: 0.9rem;
+  color: #475569;
+  font-weight: 600;
 }
 
 .detail-row .value {
   font-size: 1rem;
   font-weight: bold;
+  color: #ea580c;
 }
 
 /* Impact meter */
 .impact-meter {
-  background: rgba(20, 28, 48, 0.65);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 16px;
+  background: #ffffff;
+  border: 1px solid rgba(220, 205, 185, 0.4);
+  border-radius: 24px;
   padding: 25px 30px;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 25px rgba(220, 205, 185, 0.15);
 }
 
 .impact-meter h3 {
-  color: #10b981;
-  font-size: 1.1rem;
+  color: #ea580c;
+  font-size: 1.15rem;
+  font-weight: 700;
   margin-bottom: 5px;
 }
 
@@ -290,16 +294,16 @@ h4 {
 }
 
 .progress-bar-container {
-  background: #0b111e;
+  background: #fdfbf7;
   height: 12px;
   border-radius: 10px;
   overflow: hidden;
   margin-bottom: 10px;
-  border: 1px solid #1e293b;
+  border: 1px solid rgba(220, 205, 185, 0.3);
 }
 
 .progress-bar {
-  background: linear-gradient(90deg, #10b981, #3b82f6);
+  background: linear-gradient(90deg, #f97316, #facc15);
   height: 100%;
   border-radius: 10px;
   transition: width 0.5s ease-in-out;
@@ -310,5 +314,6 @@ h4 {
   justify-content: space-between;
   font-size: 0.75rem;
   color: #64748b;
+  font-weight: 600;
 }
 </style>
