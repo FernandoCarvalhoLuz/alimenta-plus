@@ -72,5 +72,33 @@ router.get('/', async (req, res) => {
     }
 });
 
+// 4. Rota de Login por Documento (POST /api/usuarios/login)
+router.post('/login', async (req, res) => {
+    try {
+        const { documento } = req.body;
+        if (!documento) {
+            return res.status(400).json({ error: "O CPF ou CNPJ é obrigatório para realizar login." });
+        }
+        
+        // Remove caracteres especiais para buscar correspondência exata
+        const documentoLimpo = documento.toString().replace(/\D/g, '');
+        const usuario = await Usuario.findOne({ documento: documentoLimpo });
+        
+        if (!usuario) {
+            return res.status(404).json({ error: "Nenhum usuário cadastrado encontrado com este documento." });
+        }
+        
+        res.status(200).json({
+            message: "Login realizado com sucesso!",
+            usuario
+        });
+    } catch (error) {
+        res.status(500).json({
+            error: "Erro ao autenticar usuário.",
+            detalhes: error.message
+        });
+    }
+});
+
 // 6. Exportação do Roteador
 module.exports = router;
