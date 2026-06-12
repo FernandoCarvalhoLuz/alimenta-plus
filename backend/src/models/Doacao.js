@@ -5,6 +5,7 @@ const doacaoSchema = new mongoose.Schema({
     titulo: { type: String, required: true },
     categoria: { type: String, required: true },
     quantidade: { type: String, required: true },
+    instrucoes_retirada: { type: String, required: true }, // Orientações de retirada (ex: rua lateral, cozinha)
     status_reserva: { type: String, enum: ['DISPONIVEL', 'RESERVADA', 'COLETADA'], default: 'DISPONIVEL' },
     data_criacao: { type: Date, default: Date.now }
 });

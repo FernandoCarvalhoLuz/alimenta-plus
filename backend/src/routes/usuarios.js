@@ -58,5 +58,19 @@ router.post('/', async (req, res) => {
     }
 });
 
+// 3. Rota para Listar todos os Usuários (GET /api/usuarios)
+// Útil para selecionar doadores de teste no frontend e listar participantes.
+router.get('/', async (req, res) => {
+    try {
+        const usuarios = await Usuario.find({});
+        res.status(200).json(usuarios);
+    } catch (error) {
+        res.status(500).json({
+            error: "Erro ao listar usuários.",
+            detalhes: error.message
+        });
+    }
+});
+
 // 6. Exportação do Roteador
 module.exports = router;

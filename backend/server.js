@@ -30,7 +30,9 @@ mongoose.connect(MONGO_URI)
 
 // 5. Registro das Rotas da API
 const usuariosRouter = require('./src/routes/usuarios'); // Importa o roteador que criamos há pouco
+const doacoesRouter = require('./src/routes/doacoes'); // Importa o roteador de doações
 app.use('/api/usuarios', usuariosRouter); // Diz que todo endpoint de usuários começa com /api/usuarios
+app.use('/api/doacoes', doacoesRouter); // Diz que todo endpoint de doações começa com /api/doacoes
 
 // 6. Rota Base para Testes
 app.get('/', (req, res) => {
