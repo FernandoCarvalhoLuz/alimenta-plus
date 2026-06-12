@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alimenta+ - Relatório de Desenvolvimento (Ondas 1, 2 e 3)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-color: #fdfbf7;
+      --card-bg: #ffffff;
+      --primary: #ea580c;
+      --primary-light: #ffedd5;
+      --secondary: #f59e0b;
+      --text-main: #1e293b;
+      --text-muted: #64748b;
+      --border-color: rgba(220, 205, 185, 0.4);
+      --shadow: 0 10px 30px rgba(220, 205, 185, 0.2);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Quicksand', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      line-height: 1.6;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 50px;
+      padding-bottom: 30px;
+      border-bottom: 2px dashed var(--border-color);
+    }
+
+    .logo {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 10px;
+    }
+
+    .logo span {
+      color: var(--secondary);
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      color: var(--text-main);
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+    }
+
+    /* Cards das Ondas */
+    .wave-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 35px;
+      margin-bottom: 40px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s ease;
+    }
+
+    .wave-card:hover {
+      transform: translateY(-2px);
+    }
+
+    .wave-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 6px;
+      height: 100%;
+      background: linear-gradient(to bottom, var(--primary), var(--secondary));
+    }
+
+    .wave-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+    }
+
+    .wave-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .wave-badge {
+      background: var(--primary-light);
+      color: var(--primary);
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+
+    h3 {
+      font-size: 1.15rem;
+      color: var(--text-main);
+      margin-top: 20px;
+      margin-bottom: 10px;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 5px;
+    }
+
+    ul {
+      list-style-type: none;
+      padding-left: 0;
+    }
+
+    li {
+      margin-bottom: 15px;
+      position: relative;
+      padding-left: 25px;
+    }
+
+    li::before {
+      content: "🍊";
+      position: absolute;
+      left: 0;
+      top: 2px;
+      font-size: 0.95rem;
+    }
+
+    .file-path {
+      display: inline-block;
+      background: #f1f5f9;
+      color: #0f172a;
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-family: monospace;
+      margin-top: 5px;
+      border: 1px solid #e2e8f0;
+    }
+
+    /* Bloco de História de Usuário Mapeada */
+    .user-story-box {
+      background: #fffbeb;
+      border: 1px solid #fef3c7;
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 25px;
+    }
+
+    .user-story-box h4 {
+      color: #b45309;
+      margin-bottom: 10px;
+      font-size: 1rem;
+      font-weight: 700;
+    }
+
+    .user-story-box p {
+      font-size: 0.9rem;
+      color: #78350f;
+      line-height: 1.5;
+      margin-bottom: 8px;
+    }
+
+    .user-story-box p strong {
+      color: #92400e;
+    }
+
+    /* Fluxo Integrado do Usuário (Ricardo e Sandra) */
+    .journey-section {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 35px;
+      box-shadow: var(--shadow);
+      margin-top: 50px;
+    }
+
+    .journey-title {
+      font-size: 1.6rem;
+      color: var(--primary);
+      margin-bottom: 15px;
+      text-align: center;
+      font-weight: 700;
+    }
+
+    .journey-flow {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 25px;
+      margin-top: 25px;
+    }
+
+    @media (max-width: 768px) {
+      .journey-flow {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .persona-card {
+      background: #fdfbf7;
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 20px;
+    }
+
+    .persona-card h5 {
+      font-size: 1.1rem;
+      color: var(--primary);
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .step-list {
+      counter-reset: steps;
+    }
+
+    .step-item {
+      position: relative;
+      padding-left: 35px;
+      margin-bottom: 20px;
+    }
+
+    .step-item::before {
+      counter-increment: steps;
+      content: counter(steps);
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 24px;
+      height: 24px;
+      background: var(--primary);
+      color: #ffffff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: bold;
+    }
+
+    .step-text {
+      font-size: 0.9rem;
+      color: var(--text-main);
+    }
+
+    .step-tech {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      display: block;
+      margin-top: 4px;
+      font-style: italic;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 60px;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    
+    <header>
+      <div class="logo">🍊 Alimenta<span>+</span></div>
+      <h1>Manual Técnico de Entregas & Jornada do Usuário</h1>
+      <p class="subtitle">Mapeamento de Requisitos e Arquitetura de Software (Ondas 1, 2 e 3)</p>
+    </header>
+
+    <!-- ONDA 1 -->
+    <section class="wave-card">
+      <div class="wave-header">
+        <h2 class="wave-title">🌊 Onda 1: Fundação e Conformidade Jurídica</h2>
+        <span class="wave-badge">Concluída & Integrada</span>
+      </div>
+      <p class="subtitle">Eixo focado no cadastro higienizado, busca dinâmica e conformidade com o marco legal.</p>
+
+      <h3>Funcionalidades e Onde Estão no Código:</h3>
+      <ul>
+        <li>
+          <strong>Cadastro com Perfis Distintos (Doador vs ONG):</strong> Diferenciação de fluxos e permissões no sistema.<br>
+          <span class="file-path">backend/src/models/Usuario.js</span> e 
+          <span class="file-path">frontend/src/components/CadastroUsuario.vue</span>
+        </li>
+        <li>
+          <strong>Máscara de Identificação & Sanitização:</strong> CPF/CNPJ formatados no frontend e limpos de pontuação no backend antes da inserção no banco.<br>
+          <span class="file-path">frontend/src/components/CadastroUsuario.vue (função aplicarMascara)</span> e 
+          <span class="file-path">backend/src/routes/usuarios.js</span>
+        </li>
+        <li>
+          <strong>Busca de Endereço via CEP:</strong> Disparo automático no evento de perda de foco (blur) consumindo a API ViaCEP.<br>
+          <span class="file-path">frontend/src/components/CadastroUsuario.vue (função buscarCep)</span>
+        </li>
+        <li>
+          <strong>Segurança Jurídica (Lei 14.016/2020):</strong> Validação de termo de responsabilidade civil obrigatória no formulário com exibição em modal.<br>
+          <span class="file-path">frontend/src/components/CadastroUsuario.vue</span>
+        </li>
+      </ul>
+
+      <div class="user-story-box">
+        <h4>História de Usuário Relacionada:</h4>
+        <p><strong>COMO</strong> gestor de um estabelecimento comercial (Ricardo),<br>
+           <strong>QUERO</strong> me cadastrar preenchendo o CNPJ e o CEP de forma rápida e aceitando os termos de segurança,<br>
+           <strong>PARA QUE</strong> eu possa disponibilizar sobras de alimentos legalmente sem riscos de processos judiciais infundados.</p>
+        <p><em>Critério de Aceite Técnico:</em> Impedir cadastro se o documento contiver menos de 11 ou 14 dígitos e se o checkbox do termo jurídico não estiver marcado.</p>
+      </div>
+    </section>
+
+    <!-- ONDA 2 -->
+    <section class="wave-card">
+      <div class="wave-header">
+        <h2 class="wave-title">🌊 Onda 2: Core Business e Acessibilidade</h2>
+        <span class="wave-badge">Concluída & Integrada</span>
+      </div>
+      <p class="subtitle">Eixo focado no cadastro ágil de alimentos, acessibilidade para inclusão e indicadores de reputação.</p>
+
+      <h3>Funcionalidades e Onde Estão no Código:</h3>
+      <ul>
+        <li>
+          <strong>Cadastro Expresso de Alimentos:</strong> Formulário rápido simplificado para postagem de itens excedentes antes do fechamento comercial.<br>
+          <span class="file-path">frontend/src/components/CadastroDoacao.vue</span> e 
+          <span class="file-path">backend/src/models/Doacao.js</span>
+        </li>
+        <li>
+          <strong>Modo de Alto Contraste (Acessibilidade Visual):</strong> Controle no cabeçalho que ativa o tema monocromático de alta legibilidade.<br>
+          <span class="file-path">frontend/src/App.vue (classe .high-contrast no CSS)</span>
+        </li>
+        <li>
+          <strong>Mecanismo de Reputação Dinâmico:</strong> Cálculo de estrelas exibidas nos perfis. Sucesso na entrega concede pontuação; desistências não notificadas punem.<br>
+          <span class="file-path">backend/src/routes/doacoes.js (rotas /coletar e /cancelar)</span>
+        </li>
+      </ul>
+
+      <div class="user-story-box">
+        <h4>História de Usuário Relacionada:</h4>
+        <p><strong>COMO</strong> usuário com limitações visuais (Sandra),<br>
+           <strong>QUERO</strong> alternar o site para o modo de Alto Contraste com botões legíveis,<br>
+           <strong>PARA QUE</strong> eu consiga ver a reputação das padarias parceiras e reservar alimentos sem dificuldade de leitura.</p>
+        <p><em>Critério de Aceite Técnico:</em> Utilizar fontes semânticas Quicksand e converter backgrounds em preto sólido e fontes em branco/amarelo quando o contraste for ativado.</p>
+      </div>
+    </section>
+
+    <!-- ONDA 3 -->
+    <section class="wave-card">
+      <div class="wave-header">
+        <h2 class="wave-title">🌊 Onda 3: Operação e Controle</h2>
+        <span class="wave-badge">Concluída & Integrada</span>
+      </div>
+      <p class="subtitle">Eixo focado no agendamento de reservas exclusivas e mensuração de impacto social ESG.</p>
+
+      <h3>Funcionalidades e Onde Estão no Código:</h3>
+      <ul>
+        <li>
+          <strong>Controle de Reserva Exclusiva:</strong> Bloqueio automático de alimentos selecionados por uma ONG para evitar duplicidade de reservas no banco de dados.<br>
+          <span class="file-path">backend/src/routes/doacoes.js (rota /:id/reservar)</span> e 
+          <span class="file-path">frontend/src/components/ListaDoacoes.vue</span>
+        </li>
+        <li>
+          <strong>Relatório de Oferta e Demanda (Impacto ESG):</strong> Dashboards com métricas sobre alimentos reaproveitados e total de coletas concluídas.<br>
+          <span class="file-path">frontend/src/components/RelatorioGlobal.vue</span> e 
+          <span class="file-path">backend/src/routes/doacoes.js (rota /relatorio)</span>
+        </li>
+      </ul>
+
+      <div class="user-story-box">
+        <h4>História de Usuário Relacionada:</h4>
+        <p><strong>COMO</strong> voluntária de ONG (Sandra),<br>
+           <strong>QUERO</strong> reservar uma doação ativa de marmitas no feed e ver as instruções logísticas de entrega no meu painel,<br>
+           <strong>PARA QUE</strong> eu possa retirá-las fisicamente e comprovar a entrega alimentando a barra de progresso da plataforma.</p>
+        <p><em>Critério de Aceite Técnico:</em> O status do alimento deve progredir de DISPONIVEL para RESERVADA e, finalmente, COLETADA no banco MongoDB.</p>
+      </div>
+    </section>
+
+    <!-- JORNADA COMPLETA E INTEGRADA DO USUÁRIO -->
+    <section class="journey-section">
+      <h2 class="journey-title">🍊 JORNADA COMPLETA DO USUÁRIO NO ALIMENTA+</h2>
+      <p class="subtitle" style="text-align: center;">Como os perfis Doador (Ricardo) e ONG (Sandra) interagem na plataforma passo a passo</p>
+
+      <div class="journey-flow">
+        
+        <!-- FLUXO DO DOADOR -->
+        <div class="persona-card">
+          <h5>🏢 Doador (Ricardo - Padaria Alfa)</h5>
+          <div class="step-list">
+            
+            <div class="step-item">
+              <p class="step-text"><strong>Cadastra-se no Alimenta+</strong> informando CNPJ e CEP. Aceita obrigatoriamente os termos da Lei 14.016/2020 para isenção civil.</p>
+              <span class="step-tech">Tecnologias: ViaCEP, Máscara JS, Modal de Termos.</span>
+            </div>
+
+            <div class="step-item">
+              <p class="step-text"><strong>Faz login</strong> informando apenas seu CNPJ. O sistema o reconhece como perfil Doador e exibe seu painel exclusivo.</p>
+              <span class="step-tech">Tecnologias: LocalStorage, Express Router (POST /login).</span>
+            </div>
+
+            <div class="step-item">
+              <p class="step-text"><strong>Lança uma doação expresso</strong> de pães antes de fechar a loja, descrevendo instruções logísticas ("Entrar pelo portão dos fundos").</p>
+              <span class="step-tech">Tecnologias: Mongoose Schema (Doacao.js), Status: DISPONIVEL.</span>
+            </div>
+
+            <div class="step-item">
+              <p class="step-text"><strong>Confirma a coleta física</strong> assim que a Sandra chega na padaria. Sua reputação é acrescida de +0.1 estrela.</p>
+              <span class="step-tech">Tecnologias: Mongoose Update, Status: COLETADA.</span>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- FLUXO DA ONG -->
+        <div class="persona-card">
+          <h5>🤝 ONG (Sandra - Lar Amigo)</h5>
+          <div class="step-list">
+            
+            <div class="step-item">
+              <p class="step-text"><strong>Cadastra-se e faz login</strong> com seu documento. O sistema a identifica como perfil ONG Receptora.</p>
+              <span class="step-tech">Tecnologias: LocalStorage Session, Vue navigation guards.</span>
+            </div>
+
+            <div class="step-item">
+              <p class="step-text"><strong>Navega no feed</strong> de doações disponíveis. Se necessário, ativa o <em>Alto Contraste</em> para facilitar a leitura.</p>
+              <span class="step-tech">Tecnologias: CSS classes reativas (Acessibilidade Visual).</span>
+            </div>
+
+            <div class="step-item">
+              <p class="step-text"><strong>Reserva o lote de pães</strong> da Padaria Alfa. O item fica bloqueado para outras ONGs e vai para sua aba de agendamentos.</p>
+              <span class="step-tech">Tecnologias: Reserva Schema, Status: RESERVADA.</span>
+            </div>
+
+            <div class="step-item">
+              <p class="step-text"><strong>Acompanha as Métricas ESG</strong> na aba global, visualizando a taxa de eficiência e o desperdício que sua rede ajudou a mitigar.</p>
+              <span class="step-tech">Tecnologias: Aggregations Pipeline ($count, $group), HTML5.</span>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <footer>
+      <p>Desenvolvido para fins acadêmicos - Projeto de Engenharia e Desenvolvimento de Software FullStack.</p>
+    </footer>
+
+  </div>
+
+</body>
+</html>
