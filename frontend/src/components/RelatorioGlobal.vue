@@ -176,7 +176,7 @@ h2 {
 }
 
 .stat-card {
-  background: #ffffff;
+  background: #faf7f2;
   border: 1px solid rgba(220, 205, 185, 0.4);
   border-radius: 24px;
   padding: 25px;
@@ -227,7 +227,7 @@ h4 {
 
 /* Bloco de doações */
 .food-grid {
-  background: #ffffff;
+  background: #faf7f2;
   border: 1px solid rgba(220, 205, 185, 0.4);
   border-radius: 24px;
   padding: 30px;
@@ -255,7 +255,7 @@ h4 {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #fdfbf7;
+  background: #f5efe6;
   padding: 12px 18px;
   border-radius: 12px;
   border: 1px solid rgba(220, 205, 185, 0.3);
@@ -275,7 +275,7 @@ h4 {
 
 /* Impact meter */
 .impact-meter {
-  background: #ffffff;
+  background: #faf7f2;
   border: 1px solid rgba(220, 205, 185, 0.4);
   border-radius: 24px;
   padding: 25px 30px;
@@ -294,7 +294,7 @@ h4 {
 }
 
 .progress-bar-container {
-  background: #fdfbf7;
+  background: #f5efe6;
   height: 12px;
   border-radius: 10px;
   overflow: hidden;

@@ -268,7 +268,7 @@ const realizarLogin = async () => {
 
 /* Card Branco com Borda Suave Sand */
 .auth-card {
-  background: #ffffff;
+  background: #faf7f2;
   border: 1px solid rgba(220, 205, 185, 0.4);
   border-radius: 24px; /* Mais arredondado / orgânico */
   width: 100%;
@@ -279,7 +279,7 @@ const realizarLogin = async () => {
 
 .auth-tabs {
   display: flex;
-  background: #fdfbf7;
+  background: #f5efe6;
   border-bottom: 1px solid rgba(220, 205, 185, 0.3);
 }
 
@@ -303,7 +303,7 @@ const realizarLogin = async () => {
 
 .tab-btn.active {
   color: #ea580c;
-  background: #ffffff;
+  background: #faf7f2;
   border-bottom: 3px solid #f97316;
 }
 

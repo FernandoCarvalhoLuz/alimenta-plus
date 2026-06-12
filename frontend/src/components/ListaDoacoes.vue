@@ -330,7 +330,7 @@ h2 {
 
 /* Card Branco com Borda Suave */
 .card-box {
-  background: #ffffff;
+  background: #faf7f2;
   border: 1px solid rgba(220, 205, 185, 0.4);
   border-radius: 24px;
   padding: 35px;
@@ -401,7 +401,7 @@ h3 {
 }
 
 .feed-item {
-  background: #fdfbf7;
+  background: #f5efe6;
   border-radius: 16px;
   padding: 20px;
   border: 1px solid rgba(220, 205, 185, 0.3);

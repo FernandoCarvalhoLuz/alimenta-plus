@@ -209,7 +209,7 @@ const showToast = ({ message, type = 'success' }) => {
 
 body {
   font-family: 'Quicksand', sans-serif;
-  background-color: #fdfbf7; /* Creme bem claro e acolhedor */
+  background-color: #f5efe6; /* Bege areia suave, reduzindo o brilho */
   color: #1e293b; /* Charcoal escuro amigável */
   overflow-x: hidden;
   transition: background-color 0.3s ease, color 0.3s ease;
@@ -230,7 +230,7 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 15px 40px;
-  background: rgba(253, 251, 247, 0.85);
+  background: rgba(245, 239, 230, 0.85);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid rgba(220, 205, 185, 0.25);
   box-shadow: 0 4px 20px rgba(220, 205, 185, 0.15);
