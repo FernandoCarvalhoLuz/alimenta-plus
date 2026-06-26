@@ -1,6 +1,6 @@
 <script setup>
 // 1. Importações do Vue
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 
 // 2. Propriedades Recebidas (Dados do Usuário Logado)
 const props = defineProps({
@@ -113,6 +113,77 @@ const obterEstrelas = (num) => {
   const nota = Math.round(num || 5);
   return '⭐'.repeat(nota) + '☆'.repeat(5 - nota);
 };
+
+// Onda 4: Indicadores de Impacto
+const totalRefeicoes = computed(() => {
+  return doacoesDoador.value.length * 15; // Estimativa: 15 refeições por doação
+});
+
+const seloSustentabilidade = computed(() => {
+  if (doacoesDoador.value.length >= 10) return 'Ouro 🥇';
+  if (doacoesDoador.value.length >= 5) return 'Prata 🥈';
+  if (doacoesDoador.value.length >= 1) return 'Bronze 🥉';
+  return 'Iniciante 🌱';
+});
+
+// Onda 4: Upload de Foto
+const fileInputRef = ref(null);
+
+const triggerUpload = () => {
+  if (fileInputRef.value) fileInputRef.value.click();
+};
+
+const handleUploadFoto = async (event) => {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const img = new Image();
+    img.src = e.target.result;
+    
+    img.onload = async () => {
+      // Otimização: Reduz tamanho e qualidade da imagem para não onerar o banco
+      const canvas = document.createElement('canvas');
+      const MAX_WIDTH = 800;
+      let width = img.width;
+      let height = img.height;
+      
+      if (width > MAX_WIDTH) {
+        height *= MAX_WIDTH / width;
+        width = MAX_WIDTH;
+      }
+      
+      canvas.width = width;
+      canvas.height = height;
+      
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, width, height);
+      
+      const base64Otimizado = canvas.toDataURL('image/jpeg', 0.7); // Compressão Jpeg 70%
+
+      try {
+        const response = await fetch(`http://localhost:3000/api/usuarios/${props.usuario._id}/foto`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ foto_local_base64: base64Otimizado })
+        });
+        
+        const data = await response.json();
+
+        if (response.ok) {
+          emit('notify', { message: 'Foto do local atualizada com sucesso!', type: 'success' });
+          atualizarDadosUsuario();
+        } else {
+          emit('notify', { message: data.error || 'Erro ao processar imagem no servidor.', type: 'error' });
+        }
+      } catch (error) {
+        emit('notify', { message: 'Erro de conexão ao enviar foto.', type: 'error' });
+      }
+    };
+  };
+  reader.readAsDataURL(file);
+};
 </script>
 
 <template>
@@ -128,6 +199,34 @@ const obterEstrelas = (num) => {
         <div class="reputation-bar">
           <span class="stars">{{ obterEstrelas(props.usuario.reputacao) }}</span>
           <span class="rating-text">Reputação: <strong>{{ props.usuario.reputacao.toFixed(1) }}</strong> / 5.0</span>
+        </div>
+
+        <!-- Indicadores de Impacto (Onda 4) -->
+        <div class="impact-metrics mt-4">
+          <div class="impact-item">
+            <span class="impact-icon">🍽️</span>
+            <div>
+              <div class="impact-value">{{ totalRefeicoes }}</div>
+              <div class="impact-label">Refeições Providenciadas</div>
+            </div>
+          </div>
+          <div class="impact-item">
+            <span class="impact-icon">🏆</span>
+            <div>
+              <div class="impact-value">{{ seloSustentabilidade }}</div>
+              <div class="impact-label">Selo de Sustentabilidade</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Foto do Local de Retirada (Onda 4) -->
+        <div class="photo-upload-section mt-4">
+          <input type="file" accept="image/*" ref="fileInputRef" @change="handleUploadFoto" style="display: none;" />
+          <button @click="triggerUpload" class="btn-upload">📸 Atualizar Foto do Local de Retirada</button>
+          <div v-if="props.usuario.foto_local_base64" class="photo-preview mt-2">
+            <p class="preview-title">Sua foto atual do local:</p>
+            <img :src="props.usuario.foto_local_base64" alt="Foto do local de retirada" class="img-preview" />
+          </div>
         </div>
       </div>
     </section>
@@ -301,6 +400,73 @@ h2 {
   color: #475569;
   font-weight: 600;
 }
+
+/* Indicadores de Impacto */
+.impact-metrics {
+  display: flex;
+  gap: 20px;
+  background: rgba(255, 255, 255, 0.6);
+  padding: 15px;
+  border-radius: 12px;
+  border: 1px solid rgba(249, 115, 22, 0.1);
+}
+
+.impact-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.impact-icon {
+  font-size: 1.8rem;
+}
+
+.impact-value {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #ea580c;
+}
+
+.impact-label {
+  font-size: 0.75rem;
+  color: #64748b;
+  font-weight: 600;
+}
+
+/* Upload de Foto */
+.btn-upload {
+  background: #ffffff;
+  border: 1px dashed #f97316;
+  color: #ea580c;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: bold;
+  font-family: 'Quicksand', sans-serif;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.2s;
+}
+
+.btn-upload:hover {
+  background: #fff7ed;
+}
+
+.img-preview {
+  max-width: 250px;
+  max-height: 150px;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  object-fit: cover;
+}
+
+.preview-title {
+  font-size: 0.75rem;
+  color: #64748b;
+  margin-bottom: 5px;
+}
+
+.mt-4 { margin-top: 1.5rem; }
+.mt-2 { margin-top: 0.5rem; }
 
 /* Grid Layout */
 .dashboard-grid {

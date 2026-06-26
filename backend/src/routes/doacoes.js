@@ -53,7 +53,7 @@ router.get('/', async (req, res) => {
         }
 
         const doacoes = await Doacao.find(query)
-                                    .populate('doador_id', 'nome empresa endereco reputacao')
+                                    .populate('doador_id', 'nome empresa endereco reputacao foto_local_base64')
                                     .sort({ data_criacao: -1 });
         res.status(200).json(doacoes);
     } catch (error) {
@@ -62,7 +62,7 @@ router.get('/', async (req, res) => {
 });
 
 // 3. OBTER RELATÓRIO GLOBAL (GET /api/doacoes/relatorio)
-// Onda 3 - Relatório de Oferta e Demanda
+// Onda 3 - Relatório de Oferta e Demanda e Onda 5 - Mapa de Calor
 router.get('/relatorio', async (req, res) => {
     try {
         const totalDoacoes = await Doacao.countDocuments();
@@ -73,13 +73,28 @@ router.get('/relatorio', async (req, res) => {
         const totalDoadores = await Usuario.countDocuments({ tipo_perfil: 'DOADOR' });
         const totalONGS = await Usuario.countDocuments({ tipo_perfil: 'ONG' });
 
+        // Cálculos para o Mapa de Calor (Onda 5)
+        const doacoesAtivas = await Doacao.find({ status_reserva: 'DISPONIVEL' }).populate('doador_id', 'endereco');
+        const heatmapRaw = {};
+        doacoesAtivas.forEach(d => {
+            if (d.doador_id && d.doador_id.endereco && d.doador_id.endereco.bairro) {
+                const bairro = d.doador_id.endereco.bairro;
+                heatmapRaw[bairro] = (heatmapRaw[bairro] || 0) + 1;
+            }
+        });
+        const heatmapData = Object.keys(heatmapRaw).map(bairro => ({
+            bairro,
+            count: heatmapRaw[bairro]
+        })).sort((a, b) => b.count - a.count); // decrescente (mais quentes primeiro)
+
         res.status(200).json({
             totalDoacoes,
             disponiveis,
             reservadas,
             coletadas,
             totalDoadores,
-            totalONGS
+            totalONGS,
+            heatmapData
         });
     } catch (error) {
         res.status(500).json({ error: "Erro ao gerar relatório.", detalhes: error.message });
@@ -94,7 +109,7 @@ router.get('/reservas/ong/:ongId', async (req, res) => {
         const reservas = await Reserva.find({ ong_id: ongId, status: 'PENDENTE' })
                                       .populate({
                                           path: 'doacao_id',
-                                          populate: { path: 'doador_id', select: 'nome empresa endereco reputacao' }
+                                          populate: { path: 'doador_id', select: 'nome empresa endereco reputacao foto_local_base64' }
                                       });
         res.status(200).json(reservas);
     } catch (error) {

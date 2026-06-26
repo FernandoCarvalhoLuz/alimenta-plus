@@ -9,7 +9,8 @@ const stats = ref({
   reservadas: 0,
   coletadas: 0,
   totalDoadores: 0,
-  totalONGS: 0
+  totalONGS: 0,
+  heatmapData: []
 });
 const carregando = ref(true);
 
@@ -30,6 +31,20 @@ const carregarStats = async () => {
 onMounted(() => {
   carregarStats();
 });
+
+const getHeatColor = (count) => {
+  if (count >= 10) return 'rgba(239, 68, 68, 0.12)';
+  if (count >= 5) return 'rgba(249, 115, 22, 0.12)';
+  if (count >= 2) return 'rgba(250, 204, 21, 0.2)';
+  return 'rgba(59, 130, 246, 0.1)';
+};
+
+const getHeatBorder = (count) => {
+  if (count >= 10) return '#ef4444';
+  if (count >= 5) return '#f97316';
+  if (count >= 2) return '#facc15';
+  return '#3b82f6';
+};
 </script>
 
 <template>
@@ -103,6 +118,25 @@ onMounted(() => {
             <span>100% Eficácia</span>
           </div>
         </div>
+
+        <!-- Mapa de Calor (Onda 5) -->
+        <div class="heatmap-section">
+          <h3>Mapa de Calor: Zonas de Abundância 📍</h3>
+          <p class="desc">Bairros com maior volume de alimentos disponíveis no momento</p>
+          
+          <div class="heatmap-grid">
+            <div v-for="(item, index) in stats.heatmapData" :key="index" 
+                 class="heatmap-item" 
+                 :style="{ backgroundColor: getHeatColor(item.count), borderLeftColor: getHeatBorder(item.count) }">
+              <span class="heatmap-bairro">{{ item.bairro }}</span>
+              <span class="heatmap-count">{{ item.count }} disponível(eis)</span>
+            </div>
+            <div v-if="!stats.heatmapData || stats.heatmapData.length === 0" class="empty-state">
+              Nenhuma doação ativa no momento para mapear.
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
@@ -315,5 +349,53 @@ h4 {
   font-size: 0.75rem;
   color: #64748b;
   font-weight: 600;
+}
+
+/* Heatmap Section */
+.heatmap-section {
+  background: #faf7f2;
+  border: 1px solid rgba(220, 205, 185, 0.4);
+  border-radius: 24px;
+  padding: 25px 30px;
+  box-shadow: 0 8px 25px rgba(220, 205, 185, 0.15);
+}
+
+.heatmap-section h3 {
+  color: #ea580c;
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+
+.heatmap-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.heatmap-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 18px;
+  border-radius: 10px;
+  border-left: 4px solid #cbd5e1;
+  transition: transform 0.2s;
+}
+
+.heatmap-item:hover {
+  transform: translateX(5px);
+}
+
+.heatmap-bairro {
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.heatmap-count {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #475569;
 }
 </style>

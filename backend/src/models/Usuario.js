@@ -2,6 +2,8 @@ const mongoose = require('mongoose');
 
 const usuarioSchema = new mongoose.Schema({
     nome: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
+    senha: { type: String, required: true },
     tipo_perfil: { type: String, enum: ['DOADOR', 'ONG'], required: true },
     empresa: { type: String, required: true },
     documento: { type: String, required: true }, // CPF ou CNPJ para verificação de identidade
@@ -14,6 +16,7 @@ const usuarioSchema = new mongoose.Schema({
         numero: String,
         complemento: String // Campo opcional de complemento
     },
+    foto_local_base64: { type: String }, // Onda 4: Upload de foto do local de retirada
     data_cadastro: { type: Date, default: Date.now }
 });
 

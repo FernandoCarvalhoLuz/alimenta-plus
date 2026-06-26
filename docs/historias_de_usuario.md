@@ -4,7 +4,7 @@ Este documento consolida as Histórias de Usuário e Critérios de Aceite para o
 
 ---
 
-### 🌊 Onda 1: Fundação e Conformidade
+### 🌊 Onda 1: Fundação e Conformidade ✅ CONCLUÍDA
 Focada em estabelecer a base segura de usuários e a conformidade jurídica exigida.
 
 #### 1. Cadastro e Validação Jurídica de Usuários
@@ -19,9 +19,17 @@ Focada em estabelecer a base segura de usuários e a conformidade jurídica exig
   * **[Integração ViaCEP]** O sistema preenche automaticamente Logradouro e Bairro ao digitar um CEP de 8 dígitos válido (evento *blur*).
   * **[Complemento de Endereço]** Fornecimento opcional de número e complemento para precisão logística.
 
+#### 1.5. Autenticação e Segurança (Login)
+* **COMO** Usuário do Sistema,
+  **QUERO** fazer login com e-mail e senha,
+  **PARA QUE** apenas eu consiga operar minha conta, garantindo segurança total sobre as doações e reservas.
+* **Critérios de Aceite:**
+  * **[Criptografia]** Senhas devem ser salvas no banco com hash usando `bcrypt`.
+  * **[Token JWT]** O acesso restrito deve gerar um token de sessão salvo localmente para autenticar as próximas interações do usuário.
+
 ---
 
-### 🌊 Onda 2: Core Business e Acessibilidade
+### 🌊 Onda 2: Core Business e Acessibilidade ✅ CONCLUÍDA
 Implementação da funcionalidade principal de publicação de excedentes e inclusão social.
 
 #### 2. Cadastro Expresso de Alimentos (Core)
@@ -53,7 +61,7 @@ Implementação da funcionalidade principal de publicação de excedentes e incl
 
 ---
 
-### 🌊 Onda 3: Operação e Controle
+### 🌊 Onda 3: Operação e Controle ✅ CONCLUÍDA
 Ativação das dinâmicas de conexão, reserva e medição de impacto.
 
 #### 5. Sistema de Reservas de Alimentos
@@ -75,7 +83,7 @@ Ativação das dinâmicas de conexão, reserva e medição de impacto.
 
 ---
 
-### 🌊 Onda 4: Identificação e Gestão
+### 🌊 Onda 4: Identificação e Gestão ✅ CONCLUÍDA
 Melhorias no monitoramento e facilitação logística da coleta física.
 
 #### 7. Dashboard para Doadores e Usuários
@@ -96,7 +104,7 @@ Melhorias no monitoramento e facilitação logística da coleta física.
 
 ---
 
-### 🌊 Onda 5: Inteligência e Refinamento
+### 🌊 Onda 5: Inteligência e Refinamento ✅ CONCLUÍDA
 Funcionalidades avançadas para otimização espacial e busca segmentada.
 
 #### 9. Filtros Inteligentes de Feed

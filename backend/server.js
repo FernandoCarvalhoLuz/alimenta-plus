@@ -19,7 +19,7 @@ const app = express();
 
 // 3. Middlewares Globais
 app.use(cors()); // Permite que a tela do Vue (porta 8080) se comunique com este servidor (porta 3000)
-app.use(express.json()); // Configura o Express para entender dados enviados em formato JSON
+app.use(express.json({ limit: '10mb' })); // Configura o Express para entender dados enviados em formato JSON e aceitar payloads maiores (Base64)
 
 // 4. Conexão com o MongoDB Atlas
 const MONGO_URI = process.env.MONGO_URI;

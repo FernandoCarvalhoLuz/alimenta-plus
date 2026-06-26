@@ -11,6 +11,8 @@ const abaAtiva = ref('login');
 // Estado reativo para o cadastro
 const formCadastro = ref({
   nome: '',
+  email: '',
+  senha: '',
   tipo_perfil: 'DOADOR',
   empresa: '',
   documento: '', // CPF ou CNPJ
@@ -20,13 +22,14 @@ const formCadastro = ref({
 
 // Estado reativo para o login
 const formLogin = ref({
-  documento: ''
+  email: '',
+  senha: ''
 });
 
 const exibirModalTermos = ref(false);
 
 // Máscara dinâmica de digitação para CPF/CNPJ
-const aplicarMascara = (event, campo) => {
+const aplicarMascara = (event) => {
   let valor = event.target.value.replace(/\D/g, ''); // Remove tudo que não for número
   if (valor.length > 14) valor = valor.slice(0, 14);
 
@@ -43,11 +46,7 @@ const aplicarMascara = (event, campo) => {
     valor = valor.replace(/(\d{4})(\d{1,2})$/, '$1-$2');
   }
 
-  if (campo === 'cadastro') {
-    formCadastro.value.documento = valor;
-  } else {
-    formLogin.value.documento = valor;
-  }
+  formCadastro.value.documento = valor;
 };
 
 // Integração ViaCEP
@@ -103,12 +102,13 @@ const realizarLogin = async () => {
     const response = await fetch('http://localhost:3000/api/usuarios/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ documento: formLogin.value.documento })
+      body: JSON.stringify({ email: formLogin.value.email, senha: formLogin.value.senha })
     });
 
     const data = await response.json();
 
     if (response.ok) {
+      localStorage.setItem('token', data.token); // Salva o token
       emit('notify', { message: `Bem-vindo de volta, ${data.usuario.nome}!`, type: 'success' });
       emit('login-success', data.usuario);
     } else {
@@ -145,13 +145,22 @@ const realizarLogin = async () => {
 
         <form @submit.prevent="realizarLogin">
           <div class="form-group">
-            <label for="login-doc">CPF ou CNPJ Cadastrado</label>
+            <label for="login-email">E-mail Cadastrado</label>
             <input 
-              type="text" 
-              id="login-doc"
-              v-model="formLogin.documento" 
-              @input="aplicarMascara($event, 'login')"
-              placeholder="000.000.000-00 ou 00.000.000/0000-00" 
+              type="email" 
+              id="login-email"
+              v-model="formLogin.email" 
+              placeholder="seu@email.com" 
+              required 
+            />
+          </div>
+          <div class="form-group">
+            <label for="login-senha">Senha</label>
+            <input 
+              type="password" 
+              id="login-senha"
+              v-model="formLogin.senha" 
+              placeholder="Digite sua senha secreta" 
               required 
             />
           </div>
@@ -168,6 +177,16 @@ const realizarLogin = async () => {
           <div class="form-group">
             <label for="reg-nome">Nome do Responsável</label>
             <input type="text" id="reg-nome" v-model="formCadastro.nome" placeholder="Digite seu nome completo" required />
+          </div>
+
+          <div class="form-group">
+            <label for="reg-email">E-mail de Acesso</label>
+            <input type="email" id="reg-email" v-model="formCadastro.email" placeholder="seu@email.com" required />
+          </div>
+
+          <div class="form-group">
+            <label for="reg-senha">Criar Senha Segura</label>
+            <input type="password" id="reg-senha" v-model="formCadastro.senha" placeholder="No mínimo 6 caracteres" minlength="6" required />
           </div>
 
           <div class="form-group">
@@ -189,7 +208,7 @@ const realizarLogin = async () => {
               type="text" 
               id="reg-doc"
               v-model="formCadastro.documento" 
-              @input="aplicarMascara($event, 'cadastro')"
+              @input="aplicarMascara($event)"
               placeholder="000.000.000-00 ou 00.000.000/0000-00" 
               required 
             />

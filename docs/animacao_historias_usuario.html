@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jornada e Auditoria - Alimenta+</title>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-color: #faf7f2;
+      --primary: #f97316; /* Laranja */
+      --secondary: #facc15; /* Amarelo */
+      --dark-orange: #ea580c;
+      --text-dark: #1e293b;
+      --text-muted: #64748b;
+      --card-bg: #ffffff;
+      --success: #16a34a; /* Verde */
+      --success-light: #f0fdf4;
+      --border-color: rgba(249, 115, 22, 0.2);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Quicksand', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-dark);
+      line-height: 1.6;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Fundo Animado */
+    .food-particles {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .emoji {
+      position: absolute;
+      font-size: 3rem;
+      opacity: 0.15;
+      animation: floatUp 20s linear infinite;
+    }
+    @keyframes floatUp {
+      0% { transform: translateY(110vh) rotate(0deg); opacity: 0; }
+      10% { opacity: 0.2; }
+      90% { opacity: 0.2; }
+      100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+    }
+
+    /* Header */
+    header {
+      text-align: center;
+      padding: 4rem 2rem 2rem 2rem;
+      background: linear-gradient(180deg, #fff7ed 0%, var(--bg-color) 100%);
+      position: relative;
+      z-index: 10;
+    }
+    header h1 {
+      font-size: 3.5rem;
+      font-weight: 700;
+      color: var(--dark-orange);
+      margin-bottom: 1rem;
+      text-shadow: 2px 2px 0px var(--secondary);
+    }
+    header p {
+      color: var(--text-muted);
+      max-width: 700px;
+      margin: 0 auto;
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+    .badge {
+      display: inline-block;
+      padding: 0.5rem 1.2rem;
+      background: var(--primary);
+      color: #fff;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 4px 15px rgba(249, 115, 22, 0.3);
+    }
+
+    /* Timeline */
+    .timeline {
+      position: relative;
+      max-width: 1000px;
+      margin: 2rem auto 6rem auto;
+      padding: 0 2rem;
+      z-index: 10;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 50%; transform: translateX(-50%);
+      width: 6px; height: 100%;
+      background: linear-gradient(to bottom, var(--primary), var(--secondary), var(--primary));
+      border-radius: 6px;
+      box-shadow: 0 0 15px rgba(249, 115, 22, 0.3);
+    }
+
+    /* Wave Divider (Auditoria) */
+    .wave-divider {
+      position: relative;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      margin: 5rem 0;
+      opacity: 0;
+      transform: scale(0.9);
+      transition: all 0.8s ease;
+    }
+    .wave-divider.show {
+      opacity: 1;
+      transform: scale(1);
+    }
+    .wave-box {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      padding: 2rem;
+      border-radius: 30px;
+      text-align: center;
+      box-shadow: 0 10px 25px rgba(249, 115, 22, 0.4);
+      z-index: 10;
+      max-width: 650px;
+      color: #fff;
+      position: relative;
+      border: 4px solid #fff;
+    }
+    .wave-box h2 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+    }
+    .wave-box p {
+      font-size: 1rem;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.95);
+      margin-bottom: 1.5rem;
+    }
+    
+    /* Post-it Metrics from Inception */
+    .wave-metrics {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 1.5rem;
+    }
+    .metric-badge {
+      background: rgba(255,255,255,0.2);
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-weight: 700;
+      font-size: 1.1rem;
+      backdrop-filter: blur(5px);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    /* Post-its / Funcionalidades */
+    .wave-features {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+    }
+    .feature-tag {
+      background: #fff;
+      color: var(--dark-orange);
+      padding: 8px 15px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      position: relative;
+    }
+    .feature-tag::after {
+      content: '';
+      position: absolute;
+      top: -5px; right: -5px;
+      width: 12px; height: 12px;
+      background: #4ade80; /* Status verde */
+      border-radius: 50%;
+      border: 2px solid #fff;
+    }
+
+    /* Timeline Items */
+    .timeline-item {
+      position: relative;
+      width: 50%;
+      padding: 2rem 3rem;
+      opacity: 0;
+      transform: translateY(100px) scale(0.8);
+      transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .timeline-item.show {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+    .timeline-item:nth-child(odd) { left: 0; text-align: right; }
+    .timeline-item:nth-child(even) { left: 50%; text-align: left; }
+
+    /* Timeline Ícone */
+    .timeline-icon {
+      position: absolute;
+      top: 3.5rem;
+      width: 50px;
+      height: 50px;
+      background: #fff;
+      border: 4px solid var(--primary);
+      border-radius: 50%;
+      z-index: 10;
+      box-shadow: 0 0 15px rgba(249, 115, 22, 0.4);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem;
+      transition: transform 0.3s;
+    }
+    .timeline-item:hover .timeline-icon { transform: rotate(15deg) scale(1.2); }
+    .timeline-item:nth-child(odd) .timeline-icon { right: -25px; }
+    .timeline-item:nth-child(even) .timeline-icon { left: -25px; }
+
+    /* Card */
+    .story-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 24px;
+      padding: 2rem;
+      box-shadow: 0 10px 30px rgba(220, 205, 185, 0.5);
+      text-align: left;
+      position: relative;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .story-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(249, 115, 22, 0.15);
+    }
+    .story-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 6px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+    }
+
+    .story-role {
+      font-size: 1.2rem;
+      color: var(--dark-orange);
+      font-weight: 700;
+      margin-bottom: 0.8rem;
+      display: block;
+    }
+
+    .story-desc {
+      color: var(--text-muted);
+      font-style: italic;
+      margin-bottom: 1.5rem;
+      font-weight: 600;
+      background: #f5efe6;
+      padding: 12px 15px;
+      border-radius: 8px;
+      border-left: 4px solid var(--secondary);
+    }
+
+    /* BDD Format */
+    .bdd-box {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 1.2rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+      transition: transform 0.2s;
+    }
+    .bdd-box:hover { transform: scale(1.02); border-color: var(--secondary); }
+    
+    .bdd-line {
+      display: flex; gap: 0.8rem; margin-bottom: 0.5rem; align-items: flex-start;
+    }
+    .bdd-line:last-child { margin-bottom: 0; }
+
+    .bdd-keyword {
+      font-weight: 700; padding: 2px 8px; border-radius: 6px;
+      font-size: 0.85rem; min-width: 85px; text-align: center;
+    }
+    .bdd-keyword.dado { background: #e2e8f0; color: #475569; }
+    .bdd-keyword.quando { background: #dbeafe; color: #2563eb; }
+    .bdd-keyword.entao { background: #dcfce7; color: #16a34a; }
+
+    .bdd-text {
+      color: var(--text-dark); font-size: 0.95rem; font-weight: 600; padding-top: 2px;
+    }
+
+    /* Readiness */
+    .system-ready {
+      margin-top: 1.5rem;
+      background: var(--success-light);
+      border: 1px dashed var(--success);
+      color: var(--success);
+      padding: 1.2rem;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .system-ready .check-icon { font-size: 1.5rem; }
+
+    @media (max-width: 768px) {
+      .timeline::before { left: 40px; }
+      .timeline-item { width: 100%; padding: 1.5rem 0 1.5rem 80px; left: 0 !important; text-align: left !important; }
+      .timeline-item:nth-child(odd) .timeline-icon, 
+      .timeline-item:nth-child(even) .timeline-icon { left: 15px; right: auto; }
+      .wave-divider { padding: 0 1rem; }
+      .wave-box { padding: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="food-particles" id="particles"></div>
+
+  <header>
+    <span class="badge">Inception & Entrega</span>
+    <h1>Ondas de Valor do Alimenta+</h1>
+    <p>Auditoria visual: Veja os Post-its originais da Inception Ágil (com métricas de valor e esforço) e confira como foram implementados na prática!</p>
+  </header>
+
+  <div class="timeline" id="timeline"></div>
+
+  <script>
+    const emojis = ['🥕', '🍞', '🍎', '🥦', '📦', '🤝', '🚛', '🥗'];
+    const particleContainer = document.getElementById('particles');
+    for (let i = 0; i < 20; i++) {
+      const el = document.createElement('div');
+      el.className = 'emoji';
+      el.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+      el.style.left = Math.random() * 100 + 'vw';
+      el.style.animationDelay = (Math.random() * 20) + 's';
+      el.style.animationDuration = (15 + Math.random() * 15) + 's';
+      particleContainer.appendChild(el);
+    }
+
+    const elements = [
+      {
+        type: 'wave',
+        onda: '🌊 ONDA 1',
+        titulo: 'Fundação e Conformidade',
+        descricao: 'Focada em estabelecer a base segura de usuários e a conformidade jurídica exigida.',
+        metrics: { coracao: 7, martelo: 3, cifrao: 9 },
+        funcionalidades: [
+          'Cadastro dos estabelecimentos (Doadores)',
+          'Cadastro das ONGs (Receptores)',
+          'Termo de segurança jurídica'
+        ]
+      },
+      {
+        type: 'story',
+        ondaRef: 'Onda 1: Fundação e Conformidade',
+        tituloHistoria: '1. Cadastro e Validação Jurídica / 1.5. Autenticação (Login)',
+        ator: 'Doador ou ONG (Estabelecimento)',
+        icone: '🔐',
+        desejo: 'COMO usuário, QUERO me cadastrar informando meus dados e aceitar os termos legais, PARA QUE eu possa operar com segurança jurídica.',
+        cenarios: [
+          { dado: 'Estou na tela de cadastro e digito meu CEP', quando: 'Clico fora do campo (blur)', entao: 'O sistema preenche Rua e Bairro automaticamente.' },
+          { dado: 'Leio as regras da Lei nº 14.016/2020', quando: 'Marco a caixa aceitando o Termo de Segurança Jurídica', entao: 'O sistema registra meu consentimento e permite a criação da conta.' },
+          { dado: 'Tenho um cadastro pronto', quando: 'Insiro E-mail e Senha e clico em Entrar', entao: 'O sistema valida o hash da senha e me concede um Token de acesso livre.' }
+        ],
+        pronto: 'Entregue: Termo de Responsabilidade validado, API ViaCEP integrada, Hash Bcrypt e Autenticação JWT implementados!'
+      },
+      {
+        type: 'wave',
+        onda: '🌊 ONDA 2',
+        titulo: 'Core Business',
+        descricao: 'Implementação da funcionalidade principal de publicação de excedentes alimentares de forma ágil.',
+        metrics: { coracao: 9, martelo: 4, cifrao: 9 },
+        funcionalidades: [
+          'Cadastro Expresso de Alimentos',
+          'Acessibilidade visual e auditiva',
+          'Sistema de reputação'
+        ]
+      },
+      {
+        type: 'story',
+        ondaRef: 'Onda 2: Core Business',
+        tituloHistoria: '2. Cadastro Expresso de Alimentos (Core)',
+        ator: 'Estabelecimento Doador',
+        icone: '🍞',
+        desejo: 'COMO Doador, QUERO registrar pacotes de excedentes com poucos cliques, PARA QUE os itens fiquem disponíveis.',
+        cenarios: [
+          { dado: 'Estou no meu Painel de Doador', quando: 'Preencho 4 campos (Título, Categoria, Qtd e Instruções) e publico', entao: 'O alimento ganha status DISPONIVEL e aparece no Feed de todas as ONGs.' }
+        ],
+        pronto: 'Entregue: Formulário Reativo no Vue salvando no MongoDB via POST em milissegundos!'
+      },
+      {
+        type: 'wave',
+        onda: '🌊 ONDA 3',
+        titulo: 'Operação e Controle',
+        descricao: 'Ativação das dinâmicas de conexão logística, regras de reserva e prevenção de conflitos.',
+        metrics: { coracao: 4, martelo: 3, cifrao: 4 },
+        funcionalidades: [
+          'Sistemas de reservas (anti-concorrência)',
+          'Relatório de oferta e demanda'
+        ]
+      },
+      {
+        type: 'story',
+        ondaRef: 'Onda 3: Operação e Controle',
+        tituloHistoria: '5. Sistema de Reservas / 6. Relatório de Oferta e Demanda',
+        ator: 'ONG Receptora',
+        icone: '🤝',
+        desejo: 'COMO ONG, QUERO reservar alimentos publicados, PARA QUE eu garanta exclusividade no item e evite viagens perdidas.',
+        cenarios: [
+          { dado: 'Vejo o feed de doações ativas', quando: 'Clico no botão Reservar Alimento', entao: 'O status muda para RESERVADA e ninguém mais consegue pegá-lo.' }
+        ],
+        pronto: 'Entregue: Endpoint POST /reservar controlando concorrência e vinculando o ID da ONG ao Item.'
+      },
+      {
+        type: 'wave',
+        onda: '🌊 ONDA 4',
+        titulo: 'Identificação e Gestão',
+        descricao: 'Melhorias no monitoramento do impacto, painel gerencial corporativo e facilitação da coleta física.',
+        metrics: { coracao: 5, martelo: 3, cifrao: 4 },
+        funcionalidades: [
+          'Dashboard para Doadores',
+          'Foto do local (para ajudar a ONG)'
+        ]
+      },
+      {
+        type: 'story',
+        ondaRef: 'Onda 4: Identificação e Gestão',
+        tituloHistoria: '7. Dashboard para Doadores / 8. Upload de Fotos do Local',
+        ator: 'Doador Corporativo',
+        icone: '🏆',
+        desejo: 'COMO Doador, QUERO ver meu impacto social e anexar fotos, PARA QUE eu use em relatórios ESG e ajude a ONG a achar meu portão.',
+        cenarios: [
+          { dado: 'Abro a tela principal do meu Dashboard', quando: 'O sistema lê meu histórico de doações', entao: 'Vejo a quantidade de Refeições geradas e meu Selo de Sustentabilidade.' },
+          { dado: 'A ONG tem dificuldade de achar minha porta', quando: 'Faço upload da foto do local', entao: 'A imagem é reduzida por Canvas no navegador e salva no meu perfil.' }
+        ],
+        pronto: 'Entregue: Computed Properties gerando métricas ESG e Compressão de Imagens Client-Side.'
+      },
+      {
+        type: 'wave',
+        onda: '🌊 ONDA 5',
+        titulo: 'Inteligência e Refinamento',
+        descricao: 'Funcionalidades avançadas para otimização espacial, busca segmentada e relatórios globais.',
+        metrics: { coracao: 6, martelo: 4, cifrao: 5 },
+        funcionalidades: [
+          'Mapa de calor com proximidade',
+          'Filtros Inteligentes'
+        ]
+      },
+      {
+        type: 'story',
+        ondaRef: 'Onda 5: Inteligência e Refinamento',
+        tituloHistoria: '9. Filtros Inteligentes / 10. Mapa de Calor (Interesse)',
+        ator: 'Gestor e ONGs',
+        icone: '🗺️',
+        desejo: 'COMO Usuário, QUERO ferramentas que me mostrem ondem estão os alimentos, PARA QUE eu cruze dados vitais.',
+        cenarios: [
+          { dado: 'Preciso apenas de Hortifrúti perto de mim', quando: 'Uso os Menus Suspensos de Filtro no Feed', entao: 'A tela mostra magicamente apenas itens do meu bairro na categoria certa.' },
+          { dado: 'Quero ver os dados globais da plataforma', quando: 'Entro no Relatório ODS', entao: 'Vejo um Mapa de Calor pintando os bairros de Azul até Vermelho conforme a densidade de doações.' }
+        ],
+        pronto: 'Entregue: Filtros Reativos Múltiplos no Frontend e Algoritmo Aggregation de Densidade no Backend!'
+      }
+    ];
+
+    const timeline = document.getElementById('timeline');
+
+    elements.forEach((el, index) => {
+      if (el.type === 'wave') {
+        const waveDiv = document.createElement('div');
+        waveDiv.className = 'wave-divider element-anim';
+        
+        let tagsHtml = el.funcionalidades.map(f => `<span class="feature-tag">${f}</span>`).join('');
+        
+        waveDiv.innerHTML = `
+          <div class="wave-box">
+            <h2>${el.onda}: ${el.titulo}</h2>
+            <div class="wave-metrics">
+              <span class="metric-badge">❤️ ${el.metrics.coracao}</span>
+              <span class="metric-badge">🔨 ${el.metrics.martelo}</span>
+              <span class="metric-badge">💲 ${el.metrics.cifrao}</span>
+            </div>
+            <p>${el.descricao}</p>
+            <div class="wave-features">
+              ${tagsHtml}
+            </div>
+          </div>
+        `;
+        timeline.appendChild(waveDiv);
+      } else {
+        const item = document.createElement('div');
+        item.className = 'timeline-item element-anim';
+        
+        let cenariosHtml = '';
+        el.cenarios.forEach(c => {
+          cenariosHtml += `
+            <div class="bdd-box">
+              <div class="bdd-line"><span class="bdd-keyword dado">DADO QUE</span><span class="bdd-text">${c.dado}</span></div>
+              <div class="bdd-line"><span class="bdd-keyword quando">QUANDO</span><span class="bdd-text">${c.quando}</span></div>
+              <div class="bdd-line"><span class="bdd-keyword entao">ENTÃO</span><span class="bdd-text">${c.entao}</span></div>
+            </div>
+          `;
+        });
+
+        item.innerHTML = `
+          <div class="timeline-icon">${el.icone}</div>
+          <div class="story-card">
+            <span style="display: inline-block; background: #ffedd5; color: #ea580c; padding: 4px 12px; border-radius: 12px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; margin-bottom: 0.5rem;">Pertencente à ${el.ondaRef}</span>
+            <h3 style="font-size: 1.3rem; color: #1e293b; font-weight: 700; margin-bottom: 0.5rem;">${el.tituloHistoria}</h3>
+            <span class="story-role">👤 ${el.ator}</span>
+            <div class="story-desc">💭 ${el.desejo}</div>
+            
+            <h4 style="margin-bottom: 0.8rem; color: #475569;">Comportamento e Navegação:</h4>
+            ${cenariosHtml}
+            
+            <div class="system-ready">
+              <span class="check-icon">✔️</span>
+              <span><strong>${el.pronto}</strong></span>
+            </div>
+          </div>
+        `;
+        timeline.appendChild(item);
+      }
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          setTimeout(() => {
+            entry.target.classList.add('show');
+          }, 150);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.element-anim').forEach(el => observer.observe(el));
+    
+    setTimeout(() => {
+      document.querySelectorAll('.element-anim').forEach((el, idx) => {
+        if (idx < 2) el.classList.add('show');
+      });
+    }, 100);
+
+  </script>
+</body>
+</html>

@@ -2,6 +2,8 @@
 const express = require('express');
 const router = express.Router();
 const Usuario = require('../models/Usuario'); // Importa o esquema de dados do Usuário
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 // 2. Rota de Criação de Usuário (POST)
 // O Express vai direcionar requisições POST para esta função.
@@ -9,9 +11,12 @@ const Usuario = require('../models/Usuario'); // Importa o esquema de dados do U
 router.post('/', async (req, res) => {
     try {
         // Desestrutura os dados enviados pela tela do Vue (que chegam no "body" da requisição)
-        const { nome, tipo_perfil, empresa, documento, aceitou_termo_juridico, endereco } = req.body;
+        const { nome, email, senha, tipo_perfil, empresa, documento, aceitou_termo_juridico, endereco } = req.body;
 
         // VALIDAÇÃO BÁSICA
+        if (!email || !senha) {
+            return res.status(400).json({ error: "E-mail e senha são obrigatórios." });
+        }
         if (!documento) {
             return res.status(400).json({ error: "O CPF ou CNPJ (documento) é obrigatório para identificação." });
         }
@@ -29,9 +34,21 @@ router.post('/', async (req, res) => {
             return res.status(400).json({ error: "É obrigatório aceitar o Termo de Segurança Jurídica." });
         }
 
+        // VERIFICA SE E-MAIL JÁ EXISTE
+        const usuarioExistente = await Usuario.findOne({ email });
+        if (usuarioExistente) {
+            return res.status(400).json({ error: "Este e-mail já está em uso." });
+        }
+
+        // CRIPTOGRAFAR SENHA
+        const salt = await bcrypt.genSalt(10);
+        const senhaCriptografada = await bcrypt.hash(senha, salt);
+
         // 3. Criando o documento do Mongoose com os dados validados
         const novoUsuario = new Usuario({
             nome,
+            email,
+            senha: senhaCriptografada,
             tipo_perfil,
             empresa,
             documento: documentoLimpo, // Salvamos o documento 100% limpo no banco
@@ -72,31 +89,63 @@ router.get('/', async (req, res) => {
     }
 });
 
-// 4. Rota de Login por Documento (POST /api/usuarios/login)
+// 4. Rota de Login com E-mail e Senha (POST /api/usuarios/login)
 router.post('/login', async (req, res) => {
     try {
-        const { documento } = req.body;
-        if (!documento) {
-            return res.status(400).json({ error: "O CPF ou CNPJ é obrigatório para realizar login." });
+        const { email, senha } = req.body;
+        if (!email || !senha) {
+            return res.status(400).json({ error: "O e-mail e a senha são obrigatórios para realizar login." });
         }
         
-        // Remove caracteres especiais para buscar correspondência exata
-        const documentoLimpo = documento.toString().replace(/\D/g, '');
-        const usuario = await Usuario.findOne({ documento: documentoLimpo });
-        
+        const usuario = await Usuario.findOne({ email });
         if (!usuario) {
-            return res.status(404).json({ error: "Nenhum usuário cadastrado encontrado com este documento." });
+            return res.status(404).json({ error: "Nenhum usuário encontrado com este e-mail." });
         }
         
+        const senhaValida = await bcrypt.compare(senha, usuario.senha);
+        if (!senhaValida) {
+            return res.status(401).json({ error: "Senha incorreta." });
+        }
+
+        // Gera o token JWT (você deve usar uma chave secreta no .env idealmente)
+        const token = jwt.sign({ id: usuario._id, perfil: usuario.tipo_perfil }, process.env.JWT_SECRET || 'chave-secreta-alimentaplus', { expiresIn: '1d' });
+        
+        // Removemos a senha do objeto de resposta por segurança
+        const usuarioResponse = { ...usuario._doc };
+        delete usuarioResponse.senha;
+
         res.status(200).json({
             message: "Login realizado com sucesso!",
-            usuario
+            usuario: usuarioResponse,
+            token
         });
     } catch (error) {
         res.status(500).json({
             error: "Erro ao autenticar usuário.",
             detalhes: error.message
         });
+    }
+});
+
+// 5. Rota para Atualizar Foto do Local (Onda 4)
+router.put('/:id/foto', async (req, res) => {
+    try {
+        const { foto_local_base64 } = req.body;
+        const usuario = await Usuario.findByIdAndUpdate(
+            req.params.id,
+            { foto_local_base64 },
+            { new: true }
+        );
+        if (!usuario) {
+            return res.status(404).json({ error: "Usuário não encontrado." });
+        }
+        
+        const usuarioResponse = { ...usuario._doc };
+        delete usuarioResponse.senha;
+
+        res.status(200).json({ message: "Foto atualizada com sucesso!", usuario: usuarioResponse });
+    } catch (error) {
+        res.status(500).json({ error: "Erro ao atualizar foto.", detalhes: error.message });
     }
 });
 

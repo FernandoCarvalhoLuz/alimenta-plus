@@ -1,6 +1,6 @@
 <script setup>
 // 1. Importações do Vue
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 
 // 2. Propriedades Recebidas (Dados da ONG Logada)
 const props = defineProps({
@@ -17,6 +17,27 @@ const doacoesDisponiveis = ref([]);
 const minhasReservas = ref([]);
 const carregandoFeed = ref(true);
 const carregandoReservas = ref(true);
+
+// Filtros Inteligentes (Onda 5)
+const filtroCategoria = ref('Todas');
+const filtroProximidade = ref('Todos');
+const categoriasLista = ['Todas', 'Panificação', 'Hortifrúti', 'Marmitas', 'Laticínios', 'Mercearia', 'Outros'];
+
+const feedFiltrado = computed(() => {
+  return doacoesDisponiveis.value.filter(item => {
+    let matchCategoria = true;
+    if (filtroCategoria.value !== 'Todas') {
+      matchCategoria = item.categoria === filtroCategoria.value;
+    }
+    
+    let matchProximidade = true;
+    if (filtroProximidade.value === 'Meu Bairro' && item.doador_id && item.doador_id.endereco) {
+      matchProximidade = item.doador_id.endereco.bairro === props.usuario.endereco.bairro;
+    }
+    
+    return matchCategoria && matchProximidade;
+  });
+});
 
 // Carrega as doações ativas (disponíveis para reserva)
 const carregarFeed = async () => {
@@ -154,14 +175,36 @@ const obterEstrelas = (num) => {
           </div>
           <p class="section-desc">Reserve alimentos que atendam à demanda de sua instituição</p>
 
+          <!-- Filtros Inteligentes (Onda 5) -->
+          <div class="filtros-inteligentes mb-3">
+            <div class="filter-group">
+              <label for="f-categoria">Filtrar por Categoria:</label>
+              <select id="f-categoria" v-model="filtroCategoria" class="filter-select">
+                <option v-for="cat in categoriasLista" :key="cat" :value="cat">{{ cat }}</option>
+              </select>
+            </div>
+            
+            <div class="filter-group">
+              <label for="f-proximidade">Proximidade (Raio):</label>
+              <select id="f-proximidade" v-model="filtroProximidade" class="filter-select">
+                <option value="Todos">Todas as Regiões</option>
+                <option value="Meu Bairro">📍 Apenas Meu Bairro ({{ props.usuario.endereco.bairro }})</option>
+              </select>
+            </div>
+          </div>
+
           <div v-if="carregandoFeed" class="loading">Buscando feed...</div>
           
           <div v-else-if="doacoesDisponiveis.length === 0" class="empty-state">
             Nenhum alimento disponível para coleta no momento. 🌿
           </div>
 
+          <div v-else-if="feedFiltrado.length === 0" class="empty-state">
+            Nenhum alimento encontrado com os filtros atuais. 🔍
+          </div>
+
           <div v-else class="feed-list">
-            <div v-for="item in doacoesDisponiveis" :key="item._id" class="feed-item">
+            <div v-for="item in feedFiltrado" :key="item._id" class="feed-item">
               <div class="feed-item-header">
                 <span class="cat-badge">{{ item.categoria }}</span>
                 <span class="badge-active">DISPONÍVEL</span>
@@ -228,6 +271,11 @@ const obterEstrelas = (num) => {
                   <div class="instruction-box">
                     <strong>Instruções de Retirada:</strong><br />
                     <p class="inst-text">{{ res.doacao_id.instrucoes_retirada }}</p>
+
+                    <div v-if="res.doacao_id.doador_id && res.doacao_id.doador_id.foto_local_base64" class="photo-preview-box">
+                      <strong>Visualização Logística:</strong><br />
+                      <img :src="res.doacao_id.doador_id.foto_local_base64" alt="Local de retirada" class="img-preview" />
+                    </div>
                   </div>
                 </div>
 
@@ -526,6 +574,21 @@ h3 {
   margin-top: 4px;
 }
 
+.photo-preview-box {
+  margin-top: 15px;
+  border-top: 1px dashed #cbd5e1;
+  padding-top: 10px;
+}
+
+.photo-preview-box img.img-preview {
+  margin-top: 8px;
+  max-width: 100%;
+  max-height: 200px;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  object-fit: cover;
+}
+
 .btn-cancel {
   width: 100%;
   background: transparent;
@@ -542,5 +605,46 @@ h3 {
 
 .btn-cancel:hover {
   background: rgba(239, 68, 68, 0.05);
+}
+
+/* Filtros Inteligentes (Onda 5) */
+.filtros-inteligentes {
+  display: flex;
+  gap: 15px;
+  background: #f5efe6;
+  padding: 12px 18px;
+  border-radius: 12px;
+  border: 1px solid rgba(220, 205, 185, 0.4);
+}
+
+.mb-3 {
+  margin-bottom: 20px;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  flex: 1;
+}
+
+.filter-group label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #475569;
+}
+
+.filter-select {
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  font-family: 'Quicksand', sans-serif;
+  font-size: 0.85rem;
+  background: #ffffff;
+  outline: none;
+}
+
+.filter-select:focus {
+  border-color: #f97316;
 }
 </style>
